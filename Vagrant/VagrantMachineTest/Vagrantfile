@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+
+  # create node, it has public network interface
+  config.vm.define :test do |test_config|
+      test_config.vm.box = "ubuntu/trusty64"
+      test_config.vm.hostname = "test"
+      config.vm.network "public_network"
+      test_config.vm.provider "virtualbox" do |vb|
+        vb.memory = "512"
+      end
+      test_config.vm.provision :shell, path: "bootstrap-ansible.sh"
+  end
+end
