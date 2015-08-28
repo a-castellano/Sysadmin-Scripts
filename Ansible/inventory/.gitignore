@@ -3,3 +3,7 @@
 # Except these files
 !.gitignore
 !my.hosts.example
+!digital_ocean.py
+!digital_ocean.ini.example
+!readme
+!make_inventory_digital_ocean.py

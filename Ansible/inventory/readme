@@ -1,0 +1,8 @@
+#I didn´t write digital_ocean.py, this script generates an ansible invetory file containing your digital ocean hosts
+
+# WARNING: It uses API v1 from Digital Ocean
+
+#usage
+Copy digital_ocean.ini.example to digital_ocean.ini and put in your own client_id and api_key
+
+python digital_ocean.py python digital_ocean.py --droplets | python make_inventory_digital_ocean.py > YOUR_INVENTORY_LIST
