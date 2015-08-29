@@ -1,0 +1,11 @@
+#Generated unsing Ansible
+
+<VirtualHost *:{{ apache_default_port | default(80) }}>
+
+	ServerAdmin webmaster@{{ server_url | default(localhost) }}
+	DocumentRoot /var/www/html
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>

@@ -1,0 +1,68 @@
+  - name: install Apache2 common packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - apache2
+      - apache2-utils
+    tags: 
+      - apache_setup
+      - packages
+
+  - name: Enabling Apache2 basic modules
+    action: command a2enmod rewrite vhost_alias expires headers
+    tags:
+      - apache_setup
+      - modules
+
+  - name: Set Apache2 apache2.conf
+    template: src=../templates/apache2.conf.j2 dest=/etc/apache2/apache2.conf
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Set Apache2 custom.conf
+    template: src=../templates/custom.conf.j2 dest=/etc/apache2/conf-enabled/custom.conf
+    tags:
+      - apache_setup
+      - conf_files    
+
+  - name: Set Apache2 envvars
+    template: src=../templates/envvars.j2 dest=/etc/apache2/envvars
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Set Apache2 ports.conf
+    template: src=../templates/ports.conf.j2 dest=/etc/apache2/ports.conf
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Change default document root
+    template: src=../templates/vhosts/000-default.conf.j2 dest=/etc/apache2/sites-available/000-default.conf
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Create /var/www/html/default folder
+    file: path=/var/www/html/default state=directory group=root owner=root mode=0755
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Cahnge default website 1
+    template: src=../templates/www_html/index.html.j2 dest=/var/www/html/index.html
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: Cahnge default website 2
+    template: src=../templates/www_html/index.html.j2 dest=/var/www/html/default/index.html
+    tags:
+      - apache_setup
+      - conf_files
+
+  - name: restart apache module
+    service: name=apache2 state=restarted
+    tags:
+      - apache_setup
+      - restart_module

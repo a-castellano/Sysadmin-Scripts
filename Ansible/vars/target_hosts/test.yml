@@ -1,0 +1,8 @@
+---
+  server_hostname: Test
+  apache_default_port: 80
+  apache_ssl_default_port: 443
+  server_url: localhost
+  apache_conf_Timeout: 300
+  apache_conf_MaxKeepAliveRequests: 100
+  apache_conf_KeepAliveTimeout: 5

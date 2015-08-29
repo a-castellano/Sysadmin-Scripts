@@ -1,0 +1,11 @@
+#Generated unsing Ansible
+
+Listen {{ apache_default_port | default(80) }}
+
+<IfModule ssl_module>
+        Listen {{ apache_ssl_default_port | default(443) }}
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen {{ apache_ssl_default_port | default(443) }}
+</IfModule>

@@ -1,0 +1,10 @@
+---
+
+  - hosts: test
+
+    vars_files:
+      - ../../vars/target_hosts/test.yml
+
+    roles:
+      - { role: ../../roles/common_setup}
+      - { role: ../../roles/apache_setup}

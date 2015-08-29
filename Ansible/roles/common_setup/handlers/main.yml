@@ -1,0 +1,3 @@
+---
+  - name: restart hostname
+    shell: hostname -F /etc/hostname

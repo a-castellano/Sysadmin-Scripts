@@ -1,0 +1,30 @@
+---
+  - name: update apt cache
+    apt: update_cache=yes
+    tags: 
+      - common
+      - update_packages
+
+  - name: upgrade apt cache
+    apt: upgrade=full
+    tags: 
+      - common
+      - update_packages
+
+  - name: install common packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - vim
+      - htop
+      - screen
+      - git
+    tags: 
+      - common
+      - packages
+
+  - name: change hostname
+    hostname: name="{{ server_hostname }}"
+    tags: common
+    notify:
+      - restart hostname
+
