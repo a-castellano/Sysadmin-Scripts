@@ -2,11 +2,15 @@
     group: name="{{item.username}}" gid="{{item.uid}}"
     with_items: users
     when: item.uid is defined
+    tags: 
+      - create users
 
   - name: Create user groups (uid is not defined)
     group: name="{{item.username}}" 
     with_items: users
     when: item.uid is not defined
+    tags: 
+      - create users
 
   - name: Create users (uid is defined)
     user: name="{{item.username}}"
@@ -19,6 +23,8 @@
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
     when: item.uid is defined
+    tags: 
+      - create users
 
   - name: Create users (uid is not defined)
     user: name="{{item.username}}"
@@ -31,36 +37,50 @@
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
     when: item.uid is defined
+    tags: 
+      - create users
 
   - name: insert authorized ssh keys
     authorized_key: user="{{item.0.username}}" key="{{item.1}}"
     with_subelements:
       - users
       - authorized_keys
+    tags: 
+      - create users
 
   - name: copy ssh keys
     copy: src=../../../files/ssh_keys/{{item.ssh_key}} dest="{{item.home if item.home is defined else '/home/'+item.username}}/.ssh/id_rsa" mode=400 owner={{item.username}} group={{item.username}}
     with_items: users
     when: item.ssh_key is defined
+    tags: 
+      - create users
 
   - name: copy ssh public keys
     copy: src=../../../files/ssh_keys/{{item.ssh_key}}.pub dest="{{item.home if item.home is defined else '/home/'+item.username}}/.ssh/id_rsa.pub" mode=644 owner={{item.username}} group={{item.username}}
     with_items: users
     when: item.ssh_key is defined
+    tags: 
+      - create users
 
   - name: copy user .bashrc if exists
     copy: src=../../../files/bash_rc/{{item.bash_rc}}.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.bashrc mode=644 owner={{item.username}} group={{item.username}}
     with_items: users
     when: item.bash_rc is defined
+    tags: 
+      - create users
 
   - name: copy user .profile if exists
     copy: src=../../../files/profiles/{{item.profile}}.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.profile mode=644 owner={{item.username}} group={{item.username}}
     with_items: users
     when: item.profile is defined
+    tags: 
+      - create users
 
   - name: add user to sudoers files
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL'"
     with_items: users
     when: item.sudo is defined
+    tags: 
+      - create users
 
 

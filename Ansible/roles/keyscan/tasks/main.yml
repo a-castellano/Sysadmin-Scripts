@@ -1,0 +1,24 @@
+  - name: clean /root/.ssh/known_hosts
+    shell: echo ""  > /root/.ssh/known_hosts
+    tags: 
+      - keyscan
+
+  - name: keyscan servers
+    shell: ssh-keyscan {{item}}  >> /root/.ssh/known_hosts
+    with_items: servers
+    tags: 
+      - keyscan
+
+  - name: clean users known_hosts
+    shell: su {{item.username}} -c "echo ''  > {{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts"
+    with_items: users
+    tags: 
+      - keyscan
+
+  - name: keyscan servers user by user
+    shell: su {{ item[0].username }} -c "ssh-keyscan {{ item[1] }} >> {{ item[0].home if item[0].home is defined else '/home/'+item[0].username }}/.ssh/known_hosts"
+    with_nested:
+      - users
+      - servers
+    tags: 
+      - keyscan
