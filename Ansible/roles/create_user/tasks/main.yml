@@ -32,7 +32,6 @@
           groups="{{item.groups | join(',') if item.groups is defined}}"
           password="{{item.password if item.password is defined else '!'}}"
           comment="{{item.name if item.name is defined else ''}}"
-          uid="{{item.uid if item.uid is defined}}"
           shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
