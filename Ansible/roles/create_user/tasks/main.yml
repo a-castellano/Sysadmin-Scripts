@@ -36,7 +36,7 @@
           shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
-    when: item.uid is defined
+    when: item.uid is not defined
     tags: 
       - create users
 
