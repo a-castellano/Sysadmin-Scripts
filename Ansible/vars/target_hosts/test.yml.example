@@ -1,0 +1,42 @@
+---
+  server_hostname: Test
+
+  apache_default_port: 80
+  apache_ssl_default_port: 443
+  server_url: "localhost"
+  apache_conf_Timeout: 300
+  apache_KeepAlive: "On"
+  apache_conf_MaxKeepAliveRequests: 100
+  apache_conf_KeepAliveTimeout: 5
+
+  php_max_execution_time: 30
+  php_max_input_time: 60
+  php_memory_limit: "128M"
+  php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+  php_post_max_size: "8M"
+  php_file_uploads: "On"
+  php_upload_max_filesize: "2M"
+  php_max_file_uploads: 20
+
+  #Generate password
+  #python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
+
+  users: 
+    - username: username
+      group: username
+      groups: ['username']
+      uid: 1002
+      ssh_key: username_key
+      authorized_keys: 
+        - "ssh-rsa INSERT KEY HERE"
+        - "ssh-rsa INSERT OTHER KEY HERE"
+      home: /home/user
+      password: $1$SomeSalt$Enw8RxpmGtCqift8eprzs. #userpass
+    - username: git
+      group: www-data
+      name: git
+      groups: ['www-data']
+      ssh_key: git_key
+      authorized_keys:
+        - "ssh-rsa INSERT KEY HERE"
+      password: $1$SomeSalt$/C8g114aMctC8YrNUaYD7/ #gitpass

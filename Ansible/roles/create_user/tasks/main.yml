@@ -1,0 +1,59 @@
+  - name: Create user groups with (uid is defined)
+    group: name="{{item.username}}" gid="{{item.uid}}"
+    with_items: users
+    when: item.uid is defined
+
+  - name: Create user groups (uid is not defined)
+    group: name="{{item.username}}" 
+    with_items: users
+    when: item.uid is not defined
+
+  - name: Create users (uid is defined)
+    user: name="{{item.username}}"
+          group="{{item.username}}"
+          groups="{{item.groups | join(',') if item.groups is defined}}"
+          password="{{item.password if item.password is defined else '!'}}"
+          comment="{{item.name if item.name is defined else ''}}"
+          uid="{{item.uid if item.uid is defined}}"
+          shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
+          home="{{item.home if item.home is defined else '/home/'+item.username}}"
+    with_items: users
+    when: item.uid is defined
+
+  - name: Create users (uid is not defined)
+    user: name="{{item.username}}"
+          group="{{item.username}}"
+          groups="{{item.groups | join(',') if item.groups is defined}}"
+          password="{{item.password if item.password is defined else '!'}}"
+          comment="{{item.name if item.name is defined else ''}}"
+          uid="{{item.uid if item.uid is defined}}"
+          shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
+          home="{{item.home if item.home is defined else '/home/'+item.username}}"
+    with_items: users
+    when: item.uid is defined
+
+  - name: insert authorized ssh keys
+    authorized_key: user="{{item.0.username}}" key="{{item.1}}"
+    with_subelements:
+      - users
+      - authorized_keys
+
+  - name: copy ssh keys
+    copy: src=../../../files/ssh_keys/{{item.ssh_key}} dest="{{item.home if item.home is defined else '/home/'+item.username}}/.ssh/id_rsa" mode=400 owner={{item.username}} group={{item.username}}
+    with_items: users
+    when: item.ssh_key is defined
+
+  - name: copy ssh public keys
+    copy: src=../../../files/ssh_keys/{{item.ssh_key}}.pub dest="{{item.home if item.home is defined else '/home/'+item.username}}/.ssh/id_rsa.pub" mode=644 owner={{item.username}} group={{item.username}}
+    with_items: users
+    when: item.ssh_key is defined
+
+  - name: copy user .bashrc if exists
+    copy: src=../../../files/bash_rc/{{item.bash_rc}}.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.bashrc mode=644 owner={{item.username}} group={{item.username}}
+    with_items: users
+    when: item.bash_rc is defined
+
+  - name: copy user .profile if exists
+    copy: src=../../../files/profiles/{{item.profile}}.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.profile mode=644 owner={{item.username}} group={{item.username}}
+    with_items: users
+    when: item.profile is defined

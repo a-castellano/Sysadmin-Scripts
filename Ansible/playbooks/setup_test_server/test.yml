@@ -6,5 +6,7 @@
       - ../../vars/target_hosts/test.yml
 
     roles:
-      - { role: ../../roles/common_setup}
-      - { role: ../../roles/apache_setup}
+      #- { role: ../../roles/common_setup}
+      #- { role: ../../roles/apache_setup}
+      #- { role: ../../roles/php_setup}
+      - { role: ../../roles/create_user}

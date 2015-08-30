@@ -1,8 +1,46 @@
 ---
   server_hostname: Test
+
   apache_default_port: 80
   apache_ssl_default_port: 443
-  server_url: localhost
+  server_url: "localhost"
   apache_conf_Timeout: 300
+  apache_KeepAlive: "On"
   apache_conf_MaxKeepAliveRequests: 100
   apache_conf_KeepAliveTimeout: 5
+
+  php_max_execution_time: 30
+  php_max_input_time: 60
+  php_memory_limit: "128M"
+  php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+  php_post_max_size: "8M"
+  php_file_uploads: "On"
+  php_upload_max_filesize: "2M"
+  php_max_file_uploads: 20
+
+  #Generate password
+  #python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
+
+  users: 
+    - username: username
+      group: username
+      groups: ['username']
+      uid: 1002
+      ssh_key: new_new_emule_id_rsa
+      authorized_keys: 
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGVqrNXk5frExkAEfwcf4maUm5mxeDHhduTmy58WB0DElGVYHqG9C/1LQFG6nfB1DXw/PgjAQ5Wcbcqn0TAIed3kpZvrFzFo5Cuumxvcljw/N96W08Rhm5uG1BzeVTQQ2xCn06ioW+ld3slONsRzTfYBepPHqFzQJATkkOv0o08YYn94U7us+Il4MW8pjtYsccaZ47bctNy6/Yb8PHNeRZgqpk34cH4tgZt06urBBUW+n1ZAyTe7ySR5h1dEX4ImrcNK1Q0YzKBmdF2JF+3pOLRQX1w9g0AtfAVbjbo8aDvpSWdVD4gXK0wD5NnETEDNV+ec68IJrcpei/xYIDYUo3 root@itmaster.it-ecf.com"
+      home: /home/user
+      password: $1$SomeSalt$Enw8RxpmGtCqift8eprzs. #userpass
+      bash_rc: "test"
+      profile: "test"
+    - username: git
+      group: www-data
+      name: git
+      groups: ['www-data']
+      ssh_key: git_key
+      authorized_keys:
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGVqrNXk5frExkAEfwcf4maUm5mxeDHhduTmy58WB0DElGVYHqG9C/1LQFG6nfB1DXw/PgjAQ5Wcbcqn0TAIed3kpZvrFzFo5Cuumxvcljw/N96W08Rhm5uG1BzeVTQQ2xCn06ioW+ld3slONsRzTfYBepPHqFzQJATkkOv0o08YYn94U7us+Il4MW8pjtYsccaZ47bctNy6/Yb8PHNeRZgqpk34cH4tgZt06urBBUW+n1ZAyTe7ySR5h1dEX4ImrcNK1Q0YzKBmdF2JF+3pOLRQX1w9g0AtfAVbjbo8aDvpSWdVD4gXK0wD5NnETEDNV+ec68IJrcpei/xYIDYUo3 root@itmaster.it-ecf.com"
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtLadQ8BNH3MtJUdSPPZEkiWtxbEmV2ccHY2RvFnPF/k5e6QftDBB0fsXlorz+W079kAHMA1cACpHLjChEuO9vjOHlHnkS9yomTIXhAR75eZWJ0GeSsSF19AulJTZTBVPnlYO/RjcIbEkHJ/ss8JQHvVQrLRHOaIkrEohdUv7nbOQXFVD9+4puwQka6tkFpkHRvgt+0krIELsp7UX8M962VRgQciAu0tH2iveNQKU6I27bZOf/JyQ/S1Kp+ZEuCRYGT/t6efTDnjiYsoGXxmpFCFx0rAgFPBuckj/4SIenxN3K1ingy76d7k+V3oefqnzmCMM8r+QosV/xpSEei5b5 ecomm@Mac-mini-de-Luis.local"
+      password: $1$SomeSalt$/C8g114aMctC8YrNUaYD7/ #gitpass
+      bash_rc: "test"
+      profile: "test"

@@ -3,7 +3,7 @@
 Mutex file:${APACHE_LOCK_DIR} default
 PidFile ${APACHE_PID_FILE}
 Timeout {{ apache_conf_Timeout | default(300) }}
-KeepAlive On
+KeepAlive {{ apache_KeepAlive | default("On") }}
 MaxKeepAliveRequests {{ apache_conf_MaxKeepAliveRequests | default(100) }}
 KeepAliveTimeout {{ apache_conf_KeepAliveTimeout | default(5) }}
 User ${APACHE_RUN_USER}
