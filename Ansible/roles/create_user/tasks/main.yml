@@ -57,3 +57,10 @@
     copy: src=../../../files/profiles/{{item.profile}}.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.profile mode=644 owner={{item.username}} group={{item.username}}
     with_items: users
     when: item.profile is defined
+
+  - name: add user to sudoers files
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL'"
+    with_items: users
+    when: item.sudo is defined
+
+

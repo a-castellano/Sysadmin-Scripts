@@ -32,6 +32,9 @@
         - "ssh-rsa INSERT OTHER KEY HERE"
       home: /home/user
       password: $1$SomeSalt$Enw8RxpmGtCqift8eprzs. #userpass
+      bash_rc: "test"
+      profile: "test"
+      sudo: yes
     - username: git
       group: www-data
       name: git
@@ -40,3 +43,6 @@
       authorized_keys:
         - "ssh-rsa INSERT KEY HERE"
       password: $1$SomeSalt$/C8g114aMctC8YrNUaYD7/ #gitpass
+      bash_rc: "test"
+      profile: "test"
+      sudo: yes
