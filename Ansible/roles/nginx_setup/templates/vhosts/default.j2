@@ -1,0 +1,14 @@
+server {
+        listen {{ nginx_default_port | default(80) }} default_server;
+        listen [::]:{{ nginx_default_port | default(80) }} default_server ipv6only=on;
+
+        root /var/www/html;
+        index index.html index.htm;
+
+        server_name localhost;
+
+        location / {
+                try_files $uri $uri/ =404;
+
+        }
+}

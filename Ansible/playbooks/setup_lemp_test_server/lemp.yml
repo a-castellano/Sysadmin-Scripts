@@ -1,0 +1,14 @@
+---
+
+  - hosts: lemp
+
+    vars_files:
+      - ../../vars/target_hosts/lemp.yml
+
+    roles:
+      - { role: ../../roles/common_setup}
+      - { role: ../../roles/create_user}
+      - { role: ../../roles/keyscan}
+      - { role: ../../roles/nginx_setup}
+      - { role: ../../roles/mysql_setup}
+      - { role: ../../roles/php5-fpm_setup}

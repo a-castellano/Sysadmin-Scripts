@@ -1,0 +1,62 @@
+  - name: install NGINX common packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - nginx
+    tags: 
+      - nginx_setup
+      - packages
+
+  - name: create /var/www directory
+    file: path=/var/www state=directory owner={{nginx_user}} group={{nginx_user}}
+    tags: 
+      - nginx_setup
+      - default_docroot
+
+  - name: create /var/www/html directory
+    file: path=/var/www/html state=directory owner={{nginx_user}} group={{nginx_user}}
+    tags: 
+      - nginx_setup
+      - default_docroot
+
+  - name: copy default html file on /var/www/html
+    template: src=../templates/www_html/index.html.j2 dest=/var/www/html/index.html mode=755 owner={{nginx_user}} group={{nginx_user}}
+    tags: 
+      - nginx_setup
+      - default_docroot
+
+  - name: set fastcgi_params
+    copy: src=../files/fastcgi_params dest=/etc/nginx/fastcgi_params owner=root group=root mode=644
+    tags: 
+      - nginx_setup
+      - nginx_conf
+
+  - name: set proxy_params
+    copy: src=../files/proxy_params dest=/etc/nginx/proxy_params owner=root group=root mode=644
+    tags: 
+      - nginx_setup
+      - nginx_conf
+
+  - name: set scgi_params
+    copy: src=../files/scgi_params dest=/etc/nginx/scgi_params owner=root group=root mode=644
+    tags: 
+      - nginx_setup
+      - nginx_conf
+
+  - name: set uwsgi_params
+    copy: src=../files/uwsgi_params dest=/etc/nginx/uwsgi_params owner=root group=root mode=644
+    tags: 
+      - nginx_setup
+      - nginx_conf
+
+  - name: set nginx.conf
+    template: src=../templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=644
+    tags: 
+      - nginx_setup
+      - nginx_conf
+
+  - name: set default vhost
+    template: src=../templates/vhosts/default.j2 dest=/etc/nginx/sites-available/default owner=root group=root mode=644
+    notify: restart nginx
+    tags: 
+      - nginx_setup
+      - vhost

@@ -1,0 +1,70 @@
+  - name: install php5-fpm common packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - php5-fpm
+      - php5-mysql
+    tags: 
+      - php5-fpm_setup
+      - packages
+
+  - name: php.ini max_execution_time
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="max_execution_time " line='max_execution_time = {{ php_max_execution_time | default(30) }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf 
+
+  - name: php.ini max_input_time
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="max_input_time " line='max_input_time = {{ php_max_input_time | default(60) }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf 
+
+  - name: php.ini memory_limit
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="memory_limit " line='memory_limit = {{ php_memory_limit | default("128M") }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf 
+
+  - name: php.ini error_reporting
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="error_reporting " line='error_reporting = {{ php_error_reporting | default("E_ALL & ~E_DEPRECATED & ~E_STRICT") }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf  
+
+  - name: php.ini post_max_size
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="post_max_size " line='post_max_size = {{ php_post_max_size | default("8M") }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf  
+
+  - name: php.ini file_uploads
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="^file_uploads " line='file_uploads = {{ php_file_uploads | default("On") }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf  
+
+  - name: php.ini upload_max_filesize
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="upload_max_filesize " line='upload_max_filesize = {{ php_upload_max_filesize | default("2M") }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf 
+
+  - name: php.ini max_file_uploads
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp="max_file_uploads " line='max_file_uploads = {{ php_max_file_uploads | default(20) }}' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf  
+
+  - name: php.ini cgi.fix_pathinfo
+    lineinfile: dest=/etc/php5/fpm/php.ini regexp=";cgi.fix_pathinfo=1" line='cgi.fix_pathinfo=0' state="present"
+    tags: 
+      - php5-fpm_setup
+      - php5-fpm_conf 
+
+  - name: Changing php5-fpm ports and www.conf
+    lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp='^listen = ' line='listen = 127.0.0.1:9000' state=present
+  - name: Changing php5-fpm ports and www.conf 2
+    lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp='^;pm.max_requests' line='pm.max_requests = {{ php5_fpm_max_requests | default(500) }}' state=present
+  - name: Changing php5-fpm ports and www.conf 3
+    lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp='^pm.max_children' line='pm.max_children = {{ php5_fpm_max_children | default(20) }}' state=present
+    

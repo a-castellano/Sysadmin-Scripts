@@ -3,3 +3,4 @@
 # Except these files
 !.gitignore
 !test.yml.example
+!lemp.yml.example

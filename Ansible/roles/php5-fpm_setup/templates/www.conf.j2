@@ -1,0 +1,10 @@
+[www]
+user = {{ nginx_user | default("www-data") }}
+group = {{ nginx_user | default("www-data") }}
+listen = {{ php5_fpm_listen | default("127.0.0.1:9000") }}
+pm = {{ php5_fpm_pm | default("dynamic") }}
+pm.max_children = {{ php5_fpm_max_children | default(5) }}
+pm.start_servers = {{ php5_fpm_start_servers | default(2) }}
+pm.min_spare_servers = {{ php5_fpm_spare_servers | default(1) }}
+pm.max_spare_servers = {{ php5_fpm_spare_servers | default(3) }}
+chdir = /
