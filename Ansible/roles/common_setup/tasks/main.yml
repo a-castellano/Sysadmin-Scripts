@@ -18,6 +18,7 @@
       - htop
       - screen
       - git
+      - mailutils
     tags: 
       - common
       - packages
