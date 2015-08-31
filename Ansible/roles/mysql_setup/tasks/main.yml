@@ -31,7 +31,6 @@
 
   - name: my.cnf setup
     template: src=../templates/my.cnf.j2 dest=/etc/mysql/my.cnf
-    when: mysql_root_password is defined
     tags: 
       - mysql_setup
       - mysql_password
