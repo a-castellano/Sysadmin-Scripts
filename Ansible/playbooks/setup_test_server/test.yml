@@ -11,3 +11,4 @@
       - { role: ../../roles/keyscan}
       - { role: ../../roles/apache_setup}
       - { role: ../../roles/php_setup}
+      - { role: ../../roles/mysql_setup}
