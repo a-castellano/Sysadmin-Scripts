@@ -67,4 +67,4 @@
     lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp='^;pm.max_requests' line='pm.max_requests = {{ php5_fpm_max_requests | default(500) }}' state=present
   - name: Changing php5-fpm ports and www.conf 3
     lineinfile: dest=/etc/php5/fpm/pool.d/www.conf regexp='^pm.max_children' line='pm.max_children = {{ php5_fpm_max_children | default(20) }}' state=present
-    
+    notify: restart php5

@@ -1,3 +1,3 @@
 ---
-  - name: restart php5-fpm
+  - name: restart php5
     shell: service php5-fpm restart

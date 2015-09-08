@@ -19,6 +19,7 @@
       - screen
       - git
       - mailutils
+      - unzip
     tags: 
       - common
       - packages
