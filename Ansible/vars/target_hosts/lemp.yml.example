@@ -52,6 +52,52 @@
   php5_fpm_max_requests: 500
   php5_fpm_max_children: 20
 
+
+  monit_daemon_refresh_time: 120
+  monit_httpd_port: 2812
+  monit_allow_ip: "0.0.0.0"
+  monit_allow_netmask: "0.0.0.0"
+
+  monit_allow_username: "admin"
+  monit_allow_pass: "admin"
+  monit_mailserver: "localhost"
+
+  monit_alert_mail: "your@e-mail.com"
+  monit_mail_from: "monit@e-mail.com"
+  monit_mail_to: "your@e-mail.com"
+
+  monit_check_nginx: True
+  monit_check_nginx_timeout: 15
+  monit_check_nginx_ports:
+    - 80
+    #- 8080 
+
+  monit_check_mysql: True
+  monit_check_mysql_timeout: 15
+  monit_check_mysql_ports:
+    - 3306
+  monit_check_mysql_cpu_value: '90%'
+  monit_check_mysql_cpu_cycles: 20
+  monit_check_mysql_cpu_restart: True
+
+  monit_check_php5_fpm: True
+  monit_check_php5_fpm_timeout: 60
+  monit_check_php5_fpm_ports:
+    - 9000
+
+  monit_check_varnish: False
+  monit_check_varnish_ports:
+    - 80
+
+
+  monit_check_apache2: False
+  monit_check_apache2_timeout: 15
+  monit_check_apache2_ports:
+    - 80
+  monit_check_apache2_cpu_value: '90%'
+  monit_check_apache2_cpu_cycles: 20
+  monit_check_apache2_cpu_restart: True
+
   #Generate password
   #python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
 

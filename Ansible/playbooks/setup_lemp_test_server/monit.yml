@@ -1,0 +1,9 @@
+---
+
+  - hosts: lemp
+
+    vars_files:
+      - ../../vars/target_hosts/lemp.yml
+
+    roles:
+      - { role: ../../roles/monit_setup}

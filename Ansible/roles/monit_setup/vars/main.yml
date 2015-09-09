@@ -1,0 +1,50 @@
+---
+   monit_check_disk_usage_state: True 
+   monit_check_disk_usage_percent: "80%" 
+
+   monit_check_system: True
+
+   monit_check_load5m: True
+   monit_check_load5m_load_value: 3
+   monit_check_load5m_cycles: 5
+
+   monit_check_load15m: True
+   monit_check_load15m_load_value: 1
+   monit_check_load15m_cycles: 4
+
+   monit_check_memory_usage: True
+   monit_check_memory_usage_value: '90%'
+   monit_check_memory_usage_cycles: 4
+
+   monit_check_swap_usage: True
+   monit_check_swap_usage_value: '80%'
+   monit_check_swap_usage_cycles: 4  
+
+   monit_check_cpu_usage_user: True
+   monit_check_cpu_usage_user_value: '80%'
+   monit_check_cpu_usage_user_cycles: 4
+
+   monit_check_cpu_usage_system: True
+   monit_check_cpu_usage_system_value: '20%'
+   monit_check_cpu_usage_system_cycles: 4
+
+   monit_check_cpu_usage_wait: True
+   monit_check_cpu_usage_wait_value: '20%'
+   monit_check_cpu_usage_wait_cycles: 4
+
+     #monit_check_mysql: True
+     #monit_check_mysql_timeout: 15
+     #monit_check_mysql_ports:
+       #- 3306
+     #monit_check_mysql_cpu_value: '90%'
+     #monit_check_mysql_cpu_cycles: 20
+     #monit_check_mysql_cpu_restart: True
+
+     #monit_check_php5_fpm: True
+     #monit_check_php5_fpm_timeout: 60
+     #monit_check_php5_fpm_ports:
+       #- 9000
+
+     #monit_check_varnish: False
+     #monit_check_varnish_ports:
+       #- 80

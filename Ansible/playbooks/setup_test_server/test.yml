@@ -12,3 +12,4 @@
       - { role: ../../roles/apache_setup}
       - { role: ../../roles/php_setup}
       - { role: ../../roles/mysql_setup}
+      - { role: ../../roles/monit_setup}

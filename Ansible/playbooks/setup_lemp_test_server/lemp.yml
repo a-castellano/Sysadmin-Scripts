@@ -12,3 +12,5 @@
       - { role: ../../roles/nginx_setup}
       - { role: ../../roles/mysql_setup}
       - { role: ../../roles/php5-fpm_setup}
+      - { role: ../../roles/monit_setup}
+

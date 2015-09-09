@@ -1,0 +1,206 @@
+  - name: install monit common packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - monit
+    tags: 
+      - monit_setup
+      - packages
+
+  - name: Set monit config
+    template: src=../templates/monitrc.j2 dest=/etc/monit/monitrc
+    tags:
+      - monit_setup
+      - conf_files 
+
+  - name: add alert mail to monit config file
+    lineinfile: dest=/etc/monit/monitrc line="set alert {{monit_alert_mail}}"
+    when: monit_alert_mail is defined
+
+  - name: check Disk usage
+    lineinfile: dest=/etc/monit/monitrc line="check filesystem rootfs with path / \n\tif space usage > {{ monit_check_disk_usage_percent | default('90%') }}  then alert"
+    when: monit_check_disk_usage_state
+
+  - name: check system 
+    lineinfile: dest=/etc/monit/monitrc line="check system $HOST"
+    when: monit_check_system
+
+  - name: check loadavg 5m
+    lineinfile: dest=/etc/monit/monitrc line="\tif loadavg (5min) > {{ monit_check_load5m_load_value | default(3) }} for {{ monit_check_load5m_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_load5m
+
+  - name: check loadavg 15m
+    lineinfile: dest=/etc/monit/monitrc line="\tif loadavg (15min) > {{ monit_check_load15m_load_value | default(1) }} for {{ monit_check_load15m_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_load15m
+
+  - name: check memory usage
+    lineinfile: dest=/etc/monit/monitrc line="\tif memory usage > {{ monit_check_memory_usage_value | default('80%') }} for {{ monit_check_memory_usage_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_memory_usage
+
+  - name: check swap usage
+    lineinfile: dest=/etc/monit/monitrc line="\tif swap usage > {{ monit_check_swap_usage_value | default('80%') }} for {{ monit_check_swap_usage_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_swap_usage
+
+  - name: check cpu usage (user)
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu usage (user) > {{ monit_check_cpu_usage_user_value | default('80%') }} for {{ monit_check_cpu_usage_user_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_cpu_usage_user
+
+  - name: check cpu usage (system)
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu usage (system) > {{ monit_check_cpu_usage_system_value | default('20%') }} for {{ monit_check_cpu_usage_system_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_cpu_usage_system
+
+  - name: check cpu usage (wait)
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu usage (wait) > {{ monit_check_cpu_usage_wait_value | default('20%') }} for {{ monit_check_cpu_usage_wait_cycles | default(4) }} cycles then alert"
+    when: monit_check_system and monit_check_cpu_usage_wait
+
+  - name: check nginx 
+    lineinfile: dest=/etc/monit/monitrc line="check process nginx with pidfile /var/run/nginx.pid"
+    when: monit_check_system and monit_check_nginx
+
+  - name: check nginx start
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/nginx start\""
+    when: monit_check_system and monit_check_nginx
+
+  - name: check nginx stop
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/nginx stop\""
+    when: monit_check_system and monit_check_nginx
+
+  - name: check nginx restart
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/nginx restart\""
+    when: monit_check_system and monit_check_nginx
+
+  - name: check nginx ports
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_nginx_timeout | default(15) }} seconds then alert\n\tif failed port {{item}} with timeout {{ monit_check_nginx_timeout | default(15) }} seconds then restart"
+    with_items: monit_check_nginx_ports
+    when: monit_check_system and monit_check_nginx    
+
+  - name: check mysqld
+    lineinfile: dest=/etc/monit/monitrc line="check process mysqld with pidfile /var/run/mysqld/mysqld.pid"
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld start
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/mysql start\""
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld stop
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/mysql stop\""
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld restart
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/mysql restart\""
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld port alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_mysql_timeout | default(60) }} seconds then alert"
+    with_items: monit_check_mysql_ports
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld port restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_mysql_timeout | default(60) }} seconds then restart"
+    with_items: monit_check_mysql_ports
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld socket alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed unix \"/var/run/mysqld/mysqld.sock\" timeout {{ monit_check_mysql_timeout | default(60) }} seconds then alert"
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld socket restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed unix \"/var/run/mysqld/mysqld.sock\" timeout {{ monit_check_mysql_timeout | default(60) }} seconds then restart"
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld CPU alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu > {{ monit_check_mysql_cpu_value | default('80%') }} for {{ monit_check_mysql_cpu_cycles | default(20) }} cycles then alert"
+    when: monit_check_system and monit_check_mysql
+
+  - name: check mysqld CPU restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu > {{ monit_check_mysql_cpu_value | default('80%') }} for {{ monit_check_mysql_cpu_cycles | default(20) }} cycles then restart"
+    when: monit_check_system and monit_check_mysql and monit_check_mysql_cpu_restart
+
+
+  - name: check php5-fpm
+    lineinfile: dest=/etc/monit/monitrc line="check process php5-fpm with pidfile /var/run/php5-fpm.pid"
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check php5-fpm start
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"service php5-fpm start\""
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check php5-fpm stop
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"service php5-fpm stop\""
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check php5-fpm restart
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"service php5-fpm restart\""
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check php5-fpm port alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_php5_fpm_timeout | default(60) }} seconds then alert"
+    with_items: monit_check_php5_fpm_ports
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check php5-fpm port restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_php5_fpm_timeout | default(60) }} seconds then restart"
+    with_items: monit_check_php5_fpm_ports
+    when: monit_check_system and monit_check_php5_fpm
+
+  - name: check varnish
+    lineinfile: dest=/etc/monit/monitrc line="check process varnish with pidfile /var/run/varnishd.pid"
+    when: monit_check_system and monit_check_varnish
+
+  - name: check varnish start
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/varnish start\""
+    when: monit_check_system and monit_check_varnish
+
+  - name: check varnish stop
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/varnish stop\""
+    when: monit_check_system and monit_check_varnish
+
+  - name: check varnish restart
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/varnish restart\""
+    when: monit_check_system and monit_check_varnish
+
+  - name: check varnish port alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_varnish_timeout | default(60) }} seconds then alert"
+    with_items: monit_check_varnish_ports
+    when: monit_check_system and monit_check_varnish
+
+  - name: check varnish port alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_varnish_timeout | default(60) }} seconds then restart"
+    with_items: monit_check_varnish_ports
+    when: monit_check_system and monit_check_varnish
+
+  - name: check apache2
+    lineinfile: dest=/etc/monit/monitrc line="check process apache2 with pidfile /var/run/apache2/apache2.pid"
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 start
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/apache2 start\""
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 stop
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/apache2 stop\""
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 restart
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/apache2 restart\""
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 port alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_apache2_timeout | default(60) }} seconds then alert"
+    with_items: monit_check_apache2_ports
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 port restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_apache2_timeout | default(60) }} seconds then restart"
+    with_items: monit_check_apache2_ports
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 CPU alert
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu > {{ monit_check_apache2_cpu_value | default('80%') }} for {{ monit_check_apache2_cpu_cycles | default(20) }} cycles then alert"
+    when: monit_check_system and monit_check_apache2
+
+  - name: check apache2 CPU restart
+    lineinfile: dest=/etc/monit/monitrc line="\tif cpu > {{ monit_check_apache2_cpu_value | default('80%') }} for {{ monit_check_apache2_cpu_cycles | default(20) }} cycles then restart"
+    when: monit_check_system and monit_check_mysql and monit_check_apache2_cpu_restart
+
+  - name: restart monit
+    service: name=monit state=restarted

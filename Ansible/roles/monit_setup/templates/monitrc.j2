@@ -1,0 +1,31 @@
+  set daemon {{ monit_daemon_refresh_time | default(120) }}                      
+  set logfile /var/log/monit.log
+
+  set idfile /var/lib/monit/id
+  set statefile /var/lib/monit/state
+
+  set eventqueue
+      basedir /var/lib/monit/events # set the base directory where events will be stored
+      slots 100                     # optionally limit the queue size
+
+include /etc/monit/conf.d/*
+
+set httpd port {{ monit_httpd_port | default(2812) }}   and
+use address  {{ inventory_hostname }} #Inventory hostname must be an IP address
+allow  {{ monit_allow_ip | default("127.0.0.1") }}/{{ monit_allow_netmask | default("255-255-255-0") }}
+allow {{ monit_allow_username | default("admin") }}:{{ monit_allow_pass | default("pass") }}
+
+set mailserver {{ monit_mailserver | default("localhost") }}
+
+
+
+set mail-format {
+   from: {{ monit_mail_from | default("monit") }} 
+   reply-to: {{ monit_mail_to | default("none@site.org") }}
+   subject: [$HOST] $EVENT $SERVICE at $DATE
+   message: Monit $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+
+            Working all day,
+            monit
+}
+
