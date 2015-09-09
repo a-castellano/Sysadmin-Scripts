@@ -46,3 +46,10 @@ LogFormat "%{User-agent}i" agent
 
 IncludeOptional conf-enabled/*.conf
 IncludeOptional sites-enabled/*.conf
+
+ <Location /server-status>
+         SetHandler server-status
+         Order deny,allow
+         Deny from all
+         Allow from 127.0.0.1
+ </Location>
