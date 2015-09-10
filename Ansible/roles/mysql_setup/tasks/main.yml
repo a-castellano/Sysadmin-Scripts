@@ -45,8 +45,7 @@
   - name: my.cnf users (if they are allowed)
     template: src=../templates/user_my.cnf.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.my.cnf owner={{item.username}} group={{item.username}} mode=600
     with_items: users
-    when: mysql_root_password is defined
-    when: users is defined
+    when: users is defined and item.mysql_access is defined
     tags: 
       - mysql_setup
       - mysql_password
