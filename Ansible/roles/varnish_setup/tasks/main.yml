@@ -1,0 +1,14 @@
+  - name: install varnish packages
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - varnish
+    tags:
+      - varnish_setup
+      - packages
+
+  - name: set varnish defult
+    template: src=../templates/default_varnish.j2 dest=/etc/default/varnish
+
+  - name: set varnish defult.vcl
+    template: src={{ varnish_default_vcl_location | default('../templates/default.vcl.j2') }} dest=/etc/varnish/default.vcl
+    notify: restart varnish
