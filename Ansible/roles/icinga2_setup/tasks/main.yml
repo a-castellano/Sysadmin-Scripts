@@ -1,0 +1,54 @@
+  - name: install packages requested by icingaweb2
+    apt: pkg={{item}} state=present
+    with_items:
+      - php5-gd
+      - php5-imagick
+
+    tags:
+      - common
+      - packages
+
+  - name: add icinga repo
+    apt_repository: repo='ppa:formorer/icinga'
+
+  - name: update apt
+    apt: update_cache=yes
+
+  - name: install icinga2
+    apt: pkg={{item}} state=present
+    with_items:
+      - icinga2
+      - icinga2-ido-mysql
+
+  - name: delete icinga2 database
+    mysql_db: name={{ icinga2_db_name | default("icinga") }} state=absent encoding=utf8 collation=utf8_bin
+
+  - name: create icinga2 database
+    mysql_db: name={{ icinga2_db_name | default("icinga") }} state=present encoding=utf8 collation=utf8_bin
+
+  - name: set icinga2 db premissions
+    command: mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON {{ icinga2_db_name | default('icinga') }}.* TO \"{{ icinga2_db_username | default('icinga') }}\"@\"localhost\" IDENTIFIED BY \"{{ icinga2_db_pass | default('icinga') }}\";"
+
+  - name: dump icinga2 database
+    mysql_db: name={{ icinga2_db_name | default("icinga") }} state=import target=/usr/share/icinga2-ido-mysql/schema/mysql.sql
+
+  - name: icinga2 feature enable ido-mysql
+    command: icinga2 feature enable ido-mysql
+
+  - name: icinga2 feature enable command
+    command: icinga2 feature enable command
+
+  - name: restart icinga2
+    service: name=icinga2 state=restarted
+
+  - name: wget -O - http://packages.icinga.org/icinga.key | apt-key add -
+    shell: wget -O - http://packages.icinga.org/icinga.key | apt-key add -
+
+  - name: add icingaweb repo
+    apt_repository: repo='deb http://packages.icinga.org/ubuntu icinga-trusty main' state=present
+
+
+  - name: install icingaweb2
+    apt: pkg={{item}} state=present
+    with_items:
+      - icingaweb2

@@ -13,4 +13,4 @@
       - { role: ../../roles/php_setup}
       - { role: ../../roles/mysql_setup}
       - { role: ../../roles/varnish_setup}
-      #- { role: ../../roles/monit_setup}
+      - { role: ../../roles/monit_setup}
