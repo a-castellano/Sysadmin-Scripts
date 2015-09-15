@@ -1,0 +1,8 @@
+library "db_ido_mysql"
+
+object IdoMysqlConnection "ido-mysql" {
+  user = "{{ icinga2_db_username | default('icinga') }}",
+  password = "{{ icinga2_db_pass | default('icinga') }}",
+  host = "localhost",
+  database = "{{ icinga2_db_name | default('icinga') }}"
+}

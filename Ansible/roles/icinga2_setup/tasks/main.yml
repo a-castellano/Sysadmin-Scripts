@@ -3,6 +3,7 @@
     with_items:
       - php5-gd
       - php5-imagick
+      - php5-intl
 
     tags:
       - common
@@ -27,16 +28,22 @@
     mysql_db: name={{ icinga2_db_name | default("icinga") }} state=present encoding=utf8 collation=utf8_bin
 
   - name: set icinga2 db premissions
-    command: mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON {{ icinga2_db_name | default('icinga') }}.* TO \"{{ icinga2_db_username | default('icinga') }}\"@\"localhost\" IDENTIFIED BY \"{{ icinga2_db_pass | default('icinga') }}\";"
+    command: mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON {{ icinga2_db_name | default('icinga') }}.* TO \"{{ icinga2_db_username | default('icinga') }}\"@\"localhost\" IDENTIFIED BY \"{{ icinga2_db_pass | default('icinga') }}\"; FLUSH PRIVILEGES;"
 
   - name: dump icinga2 database
     mysql_db: name={{ icinga2_db_name | default("icinga") }} state=import target=/usr/share/icinga2-ido-mysql/schema/mysql.sql
+
+  - name: configure icinga2 ido-mysql
+    template: src=../templates/ido-mysql.conf.j2 dest=/etc/icinga2/features-available/ido-mysql.conf
 
   - name: icinga2 feature enable ido-mysql
     command: icinga2 feature enable ido-mysql
 
   - name: icinga2 feature enable command
     command: icinga2 feature enable command
+
+  - name: add nagios to www-data group
+    user: name=nagios group=www-data
 
   - name: restart icinga2
     service: name=icinga2 state=restarted
