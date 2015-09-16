@@ -20,6 +20,7 @@
     with_items:
       - icinga2
       - icinga2-ido-mysql
+      - nagios-plugins
 
   - name: delete icinga2 database
     mysql_db: name={{ icinga2_db_name | default("icinga") }} state=absent encoding=utf8 collation=utf8_bin
