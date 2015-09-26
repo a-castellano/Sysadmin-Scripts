@@ -46,6 +46,13 @@
   - name: add nagios to www-data group
     user: name=nagios group=www-data
 
+  - name: template icinga2 conf files
+    template: src={{ icinga2_conf_templates | default("../templates") }}/{{item}}.conf.j2 dest=/etc/icinga2/conf.d/{{item}}.conf
+    with_items:
+      - custom
+      - groups
+      - hosts
+      - users
   - name: restart icinga2
     service: name=icinga2 state=restarted
 
