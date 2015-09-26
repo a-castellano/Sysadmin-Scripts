@@ -1,0 +1,29 @@
+  - name: install packages requested by icingaweb2
+    apt: pkg={{item}} state=present
+    with_items:
+      - php5-gd
+      - php5-imagick
+      - php5-intl
+
+    tags:
+      - common
+      - packages
+
+  - name: add icinga repo
+    apt_repository: repo='ppa:formorer/icinga'
+
+  - name: update apt
+    apt: update_cache=yes
+
+  - name: install icinga2
+    apt: pkg={{item}} state=present
+    with_items:
+      - icinga2
+      - nagios-plugins
+
+
+  - name: icinga2 feature enable command
+    command: icinga2 feature enable command
+
+
+
