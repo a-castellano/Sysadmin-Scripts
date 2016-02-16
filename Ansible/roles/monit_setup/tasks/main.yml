@@ -56,17 +56,29 @@
     lineinfile: dest=/etc/monit/monitrc line="check process nginx with pidfile /var/run/nginx.pid"
     when: monit_check_system and monit_check_nginx
 
-  - name: check nginx start
+  - name: check nginx start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/nginx start\""
-    when: monit_check_system and monit_check_nginx
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Ubuntu"
 
-  - name: check nginx stop
+  - name: check nginx start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start nginx.service\""
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check nginx stop - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/nginx stop\""
-    when: monit_check_system and monit_check_nginx
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Ubuntu"
 
-  - name: check nginx restart
+  - name: check nginx stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop nginx.service\""
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check nginx restart - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/nginx restart\""
-    when: monit_check_system and monit_check_nginx
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Ubuntu"
+
+  - name: check nginx restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl restart nginx.service\""
+    when: monit_check_system and monit_check_nginx and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
 
   - name: check nginx ports
     lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_nginx_timeout | default(15) }} seconds then alert\n\tif failed port {{item}} with timeout {{ monit_check_nginx_timeout | default(15) }} seconds then restart"
@@ -77,17 +89,29 @@
     lineinfile: dest=/etc/monit/monitrc line="check process mysqld with pidfile /var/run/mysqld/mysqld.pid"
     when: monit_check_system and monit_check_mysql
 
-  - name: check mysqld start
+  - name: check mysqld start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/mysql start\""
-    when: monit_check_system and monit_check_mysql
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Ubuntu"
 
-  - name: check mysqld stop
+  - name: check mysqld start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start mysql.service\""
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check mysqld stop - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/mysql stop\""
-    when: monit_check_system and monit_check_mysql
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Ubuntu"
 
-  - name: check mysqld restart
+  - name: check mysqld stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop mysql.service\""
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check mysqld restart - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/mysql restart\""
-    when: monit_check_system and monit_check_mysql
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Ubuntu"
+
+  - name: check mysqld restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl restart mysql.service\""
+    when: monit_check_system and monit_check_mysql and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
 
   - name: check mysqld port alert
     lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_mysql_timeout | default(60) }} seconds then alert"
@@ -120,17 +144,30 @@
     lineinfile: dest=/etc/monit/monitrc line="check process php5-fpm with pidfile /var/run/php5-fpm.pid"
     when: monit_check_system and monit_check_php5_fpm
 
-  - name: check php5-fpm start
+  - name: check php5-fpm start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"service php5-fpm start\""
-    when: monit_check_system and monit_check_php5_fpm
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Ubuntu"
 
-  - name: check php5-fpm stop
+  - name: check php5-fpm start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start php5-fpm.service\""
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check php5-fpm stop - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"service php5-fpm stop\""
-    when: monit_check_system and monit_check_php5_fpm
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Ubuntu"
 
-  - name: check php5-fpm restart
+  - name: check php5-fpm stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop php5-fpm.service\""
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check php5-fpm restart - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"service php5-fpm restart\""
-    when: monit_check_system and monit_check_php5_fpm
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Ubuntu"
+
+  - name: check php5-fpm restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl stop php5-fpm.service\""
+    when: monit_check_system and monit_check_php5_fpm and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
 
   - name: check php5-fpm port alert
     lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_php5_fpm_timeout | default(60) }} seconds then alert"
@@ -146,17 +183,29 @@
     lineinfile: dest=/etc/monit/monitrc line="check process varnish with pidfile /var/run/varnishd.pid"
     when: monit_check_system and monit_check_varnish
 
-  - name: check varnish start
+  - name: check varnish start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/varnish start\""
-    when: monit_check_system and monit_check_varnish
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Ubuntu"
 
-  - name: check varnish stop
+  - name: check varnish start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start varnish.service\""
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check varnish stop - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/varnish stop\""
-    when: monit_check_system and monit_check_varnish
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Ubuntu"
 
-  - name: check varnish restart
+  - name: check varnish stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop varnish.service\""
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check varnish restart - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/varnish restart\""
-    when: monit_check_system and monit_check_varnish
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Ubuntu"
+
+  - name: check varnish restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl restart varnish.service\""
+    when: monit_check_system and monit_check_varnish and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
 
   - name: check varnish port alert
     lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_varnish_timeout | default(60) }} seconds then alert"
@@ -170,19 +219,31 @@
 
   - name: check apache2
     lineinfile: dest=/etc/monit/monitrc line="check process apache2 with pidfile /var/run/apache2/apache2.pid"
-    when: monit_check_system and monit_check_apache2
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Ubuntu"
 
-  - name: check apache2 start
+  - name: check apache2 start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/apache2 start\""
-    when: monit_check_system and monit_check_apache2
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Ubuntu"
 
-  - name: check apache2 stop
+  - name: check apache2 start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start apache2.service\""
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check apache2 stop - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/apache2 stop\""
-    when: monit_check_system and monit_check_apache2
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Ubuntu"
 
-  - name: check apache2 restart
+  - name: check apache2 stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop apache2.service\""
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check apache2 restart - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/apache2 restart\""
-    when: monit_check_system and monit_check_apache2
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Ubuntu"
+
+  - name: check apache2 restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl restart apache2.service\""
+    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
 
   - name: check apache2 port alert
     lineinfile: dest=/etc/monit/monitrc line="\tif failed port {{item}} with timeout {{ monit_check_apache2_timeout | default(60) }} seconds then alert"

@@ -39,21 +39,21 @@
 
   - name: install geoipupdate package
     apt: pkg=libapache2-mod-geoip state=present
-    when: install_apache2_geoip is defined
+    when: install_apache2_geoip is defined and ansible_distribution == "Ubuntu"
     tags:
       - geoipupdate
       - packages
 
   - name: enable GeoIP apache2 mod
     apache2_module: state=present name=geoip
-    when: install_apache2_geoip is defined
+    when: install_apache2_geoip is defined and ansible_distribution == "Ubuntu"
     tags:
       - geoipupdate
       - apache2_mod
 
   - name: configure GeoIP apache2 mod
     template: src=../templates/apache2_geoip.conf.j2 dest=/etc/apache2/mods-enabled/geoip.conf
-    when: install_apache2_geoip is defined
+    when: install_apache2_geoip is defined and ansible_distribution == "Ubuntu"
     tags:
       - geoipupdate
       - apache2_mod
