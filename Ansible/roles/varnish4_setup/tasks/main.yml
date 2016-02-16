@@ -1,0 +1,89 @@
+  - name: install varnish dependecies
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - apt-transport-https
+    tags:
+      - varnish_setup
+      - packages
+
+  - name: Add Varnish repo GPG key (get_url)
+    get_url: url=https://repo.varnish-cache.org/GPG-key.txt dest=/tmp/VarnishGPG-key.txt mode=0777
+    tags:
+      - varnish_setup
+
+  - name: Add Varnish repo GPG key (add key)
+    shell: cat /tmp/VarnishGPG-key.txt | apt-key add -
+    tags:
+      - varnish_setup
+
+  - name: create sources.list.d/varnish-cache.list if does not exist
+    file: path=/etc/apt/sources.list.d/varnish-cache.list state=touch
+    when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+    tags:
+      - varnish_setup
+
+  - name: create sources.list.d/varnish-cache.list lines - Debian 8
+    lineinfile: dest=/etc/apt/sources.list.d/varnish-cache.list line='deb https://repo.varnish-cache.org/debian/ jessie varnish-4.0' state=present
+    when: ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+    tags:
+      - varnish_setup
+
+  - name: create sources.list.d/varnish-cache.list lines - Debian 8
+    lineinfile: dest=/etc/apt/sources.list.d/varnish-cache.list line='deb-src https://repo.varnish-cache.org/debian/ jessie varnish-4.0' state=present
+    when: ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+    tags:
+      - varnish_setup
+
+  - name: create sources.list.d/varnish-cache.list lines - Ubuntu 14.04
+    lineinfile: dest=/etc/apt/sources.list.d/varnish-cache.list line='deb https://repo.varnish-cache.org/ubuntu/ trusty varnish-4.0' state=present
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'trusty'
+    tags:
+      - varnish_setup
+
+  - name: create sources.list.d/varnish-cache.list lines - Ubuntu 14.04
+    lineinfile: dest=/etc/apt/sources.list.d/varnish-cache.list line='deb-src https://repo.varnish-cache.org/ubuntu/ trusty varnish-4.0' state=present
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'trusty'
+    tags:
+      - varnish_setup
+
+  - name: update apt cache
+    apt: update_cache=yes
+    tags:
+      - varnish_setup
+      - update_cache
+
+  - name: install varnish4
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - varnish
+    tags:
+      - varnish_setup
+      - packages
+
+  - name: set varnish defult - Ubuntu 14.04
+    template: src=../templates/default_varnish.j2 dest=/etc/default/varnish
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'trusty'
+    tags:
+      - varnish_setup
+
+  - name: set varnish defult - Debian 8
+    template: src=../templates/varnish.service.j2 dest=/lib/systemd/system/varnish.service
+    when: ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+    tags:
+      - varnish_setup
+
+  - name: enable varnish service
+    service: name=varnish enabled=yes
+    tags:
+      - varnish_setup
+
+  - name: enable varnish service - Debian 8
+    shell: systemctl enable varnish.service
+    when: ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+    tags:
+      - varnish_setup
+
+
+  - name: set varnish defult.vcl
+    template: src={{ varnish_default_vcl_location | default('../templates/default.vcl.j2') }} dest=/etc/varnish/default.vcl
+    notify: restart varnish

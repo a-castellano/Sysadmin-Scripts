@@ -1,0 +1,13 @@
+START=yes
+
+NFILES={{ varnish_NFILES | default(131072) }}
+
+MEMLOCK={{ varnish_MEMLOCK | default(82000) }}
+
+DAEMON_OPTS="-a :{{ varnish_port | default(80) }} \
+             -T localhost:6082 \
+             -f /etc/varnish/default.vcl \
+             -S /etc/varnish/secret \
+             -s malloc,{{ varnish_malloc | default('256m') }}"
+
+
