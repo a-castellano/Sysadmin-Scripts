@@ -20,6 +20,7 @@
       - git
       - mailutils
       - unzip
+      - sudo
     tags: 
       - common
       - packages

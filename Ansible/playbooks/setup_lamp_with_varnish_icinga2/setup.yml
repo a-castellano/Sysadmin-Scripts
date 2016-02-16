@@ -1,17 +1,17 @@
 ---
 
-  - hosts: test
+  - hosts: icinga
 
     vars_files:
       - ../../vars/target_hosts/LAMPwithVarnishIcinga2.yml
 
     roles:
-      #- { role: ../../roles/common_setup}
+      - { role: ../../roles/common_setup}
       #- { role: ../../roles/create_user}
       #- { role: ../../roles/keyscan}
-      #- { role: ../../roles/apache_setup}
-      #- { role: ../../roles/php_setup}
-      #- { role: ../../roles/mysql_setup}
+      - { role: ../../roles/apache_setup}
+      - { role: ../../roles/php_setup}
+      - { role: ../../roles/mysql_setup}
       #- { role: ../../roles/varnish_setup}
       #- { role: ../../roles/monit_setup}
-      - { role: ../../roles/icinga2client_setup}
+      - { role: ../../roles/icinga2_setup}

@@ -39,12 +39,13 @@
     tags: 
       - create users
 
-  - name: insert authorized ssh keys
+  - name: insert authorized ssh keys if exists
     authorized_key: user="{{item.0.username}}" key="{{item.1}}"
     with_subelements:
       - users
       - authorized_keys
-    tags: 
+    when: item.1 is defined
+    tags:
       - create users
 
   - name: copy ssh keys

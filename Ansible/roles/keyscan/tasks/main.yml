@@ -1,3 +1,8 @@
+  - name: Make sure if /root/.ssh exists
+    file: path=/root/.ssh state=directory
+    tags:
+      - keyscan
+
   - name: clean /root/.ssh/known_hosts
     shell: echo ""  > /root/.ssh/known_hosts
     tags: 
@@ -9,11 +14,31 @@
     tags: 
       - keyscan
 
-  - name: clean users known_hosts
-    shell: su {{item.username}} -c "echo ''  > {{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts"
+  - name: delete users known_hosts
+    file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=absent
     with_items: users
-    tags: 
+    tags:
       - keyscan
+
+  - name: create users .ssh folder
+    file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh state=directory owner={{item.username}} group={{item.username}}
+    with_items: users
+    tags:
+      - keyscan
+
+  - name: create users known_hosts
+    file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=touch owner={{item.username}} group={{item.username}}
+    with_items: users
+    tags:
+      - keyscan
+
+  - name: create users known_hosts
+    file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=touch owner={{item.username}} group={{item.username}}
+    with_items: users
+    tags:
+      - keyscan
+
+
 
   - name: keyscan servers user by user
     shell: su {{ item[0].username }} -c "ssh-keyscan {{ item[1] }} >> {{ item[0].home if item[0].home is defined else '/home/'+item[0].username }}/.ssh/known_hosts"
