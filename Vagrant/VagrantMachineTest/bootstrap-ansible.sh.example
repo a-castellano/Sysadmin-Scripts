@@ -2,7 +2,7 @@
 
 #Make a copy of this file called bootstrap-ansible.sh 
 #Set your ssh key, it would be your master_key.pub 
-
+touch /root/.ssh
 echo "YOUR KEY" >> /root/.ssh/authorized_keys
 apt-get update -y
 apt-get upgrade -y
