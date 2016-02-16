@@ -1,22 +1,21 @@
 Vagrant.configure("2") do |config|
-  config.vm.network "public_network"
-  # create node, it has public network interface
-  config.vm.define :testUbuntu do |testUbuntu_config|
-      testUbuntu_config.vm.box = "ubuntu/trusty64"
-      testUbuntu_config.vm.hostname = "testUbuntu"
-      testUbuntu_config.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
-      end
-      testUbuntu_config.vm.provision :shell, path: "bootstrap-ansible.sh"
-  end
+    config.vm.network "public_network"
+    # create node, it has public network interface
+    config.vm.define :testUbuntu do |testUbuntu_config|
+        testUbuntu_config.vm.box = "ubuntu/trusty64"
+        testUbuntu_config.vm.hostname = "testUbuntu"
+        testUbuntu_config.vm.provider "virtualbox" do |vb|
+            vb.memory = "512"
+        end
+        testUbuntu_config.vm.provision :shell, path: "bootstrap-ansible.sh"
+    end
 
-  config.vm.define :testDebian do |testDebian_config|
-      testDebian_config.vm.box = "debian/jessie64"
-      testDebian_config.vm.hostname = "testDebian"
-      testDebian_config.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
-      end
-      testDebian_config.vm.provision :shell, path: "bootstrap-ansible.sh"
-  end
-
+    config.vm.define :testDebian do |testDebian_config|
+        testDebian_config.vm.box = "debian/jessie64"
+        testDebian_config.vm.hostname = "testDebian"
+        testDebian_config.vm.provider "virtualbox" do |vb|
+            vb.memory = "512"
+        end
+        testDebian_config.vm.provision :shell, path: "bootstrap-ansible.sh"
+    end
 end
