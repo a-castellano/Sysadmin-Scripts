@@ -1,4 +1,12 @@
 ---
+  - name: Add contrib repos if Linux dist is Debian
+    lineinfile: dest=/etc/apt/sources.list line="deb http://http.us.debian.org/debian stable main contrib"
+    when: ansible_distribution == "Debian"
+
+  - name: Add non-free repos if Linux dist is Debian
+    lineinfile: dest=/etc/apt/sources.list line="deb http://http.us.debian.org/debian stable main contrib non-free"
+    when: ansible_distribution == "Debian"
+
   - name: update apt cache
     apt: update_cache=yes
     tags: 

@@ -1,0 +1,72 @@
+  - name: install geoipupdate repo
+    apt_repository: repo='ppa:maxmind/ppa'
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+      - repo
+
+  - name: install geoipupdate package
+    apt: pkg=geoipupdate state=present
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+      - packages
+
+  - name: create /usr/local/share/GeoIP folder
+    file: path=/usr/local/share/GeoIP state=directory
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+
+
+  - name: GeoIP conf
+    template: src=../templates/GeoIP.conf.j2 dest=/etc/GeoIP.conf
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+
+  - name: Execute geoipupdate
+    shell: geoipupdate
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+
+  - name: Cron task
+    cron: name="geoipupdate" minute="0" hour="0" job="/usr/bin/geoipupdate"
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - geoipupdate
+
+  - name: install geoipupdate package
+    apt: pkg=libapache2-mod-geoip state=present
+    when: install_apache2_geoip is defined
+    tags:
+      - geoipupdate
+      - packages
+
+  - name: enable GeoIP apache2 mod
+    apache2_module: state=present name=geoip
+    when: install_apache2_geoip is defined
+    tags:
+      - geoipupdate
+      - apache2_mod
+
+  - name: configure GeoIP apache2 mod
+    template: src=../templates/apache2_geoip.conf.j2 dest=/etc/apache2/mods-enabled/geoip.conf
+    when: install_apache2_geoip is defined
+    tags:
+      - geoipupdate
+      - apache2_mod
+    notify: restart apache2
+
+
+###
+#
+#  Vars
+#
+#  geoipupdate_user_id: 'YOUR_ID'
+#  geoipupdate_license_key: 'YOUR_LICENSE_KEY'
+#  geoipupdate_product_ids: 'YOUR_PRODUCTS'
+#  install_apache2_geoip: True if the server has apache2 installed
+#
+###
