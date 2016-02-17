@@ -1,0 +1,32 @@
+  - name: install tinyproxy
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - tinyproxy
+    tags:
+      - tinyproxy_setup
+      - packages
+
+  - name: set tinyproxy configuration
+    template: src={{ tinyproxy_conf_location | default('../templates/tinyproxy.conf.j2') }} dest=/etc/tinyproxy.conf
+    notify: restart tinyproxy
+    tags:
+      - tinyproxy_setup
+
+
+###
+#
+#  Vars
+#
+#  tinyproxy_port: 8888
+#  tinyproxy_timeout: 600
+#  tinyproxy_MaxClients: 100
+#  tinyproxy_MinSpareServers: 5
+#  tinyproxy_MaxSpareServers: 20
+#  tinyproxy_StartServers: 10
+#  tinyproxy_MaxRequestsPerChild: 0
+#  tinyproxy_AllowAddress: '0.0.0.0/0'
+#  tinyproxy_ViaProxyName: 'tinyproxy'
+#  tinyproxy_ConnectPort: 443
+#  tinyproxy_ConnectPort2: 563
+#
+###

@@ -1,0 +1,41 @@
+User nobody
+Group nogroup
+
+Port {{ tinyproxy_port | default(9999) }}
+
+BindSame yes
+
+Timeout {{ tinyproxy_timeout | default(600) }}
+
+DefaultErrorFile "/usr/share/tinyproxy/default.html"
+
+
+StatFile "/usr/share/tinyproxy/stats.html"
+
+
+Logfile "/var/log/tinyproxy/tinyproxy.log"
+
+
+LogLevel Info
+
+PidFile "/var/run/tinyproxy/tinyproxy.pid"
+
+MaxClients {{ tinyproxy_MaxClients | default(100) }}
+
+MinSpareServers {{ tinyproxy_MinSpareServers | default(5) }}
+MaxSpareServers {{ tinyproxy_MaxSpareServers | default(20) }}
+
+
+StartServers {{ tinyproxy_StartServers | default(10) }}
+
+
+MaxRequestsPerChild {{ tinyproxy_MaxRequestsPerChild | default(0) }}
+
+Allow 127.0.0.1
+Allow {{ tinyproxy_AllowAddress | default('0.0.0.0/0') }}
+
+
+ViaProxyName "{{ tinyproxy_ViaProxyName | default('tinyproxy') }}"
+
+ConnectPort {{ tinyproxy_ConnectPort | default(443) }}
+ConnectPort {{ tinyproxy_ConnectPort2 | default(563) }}
