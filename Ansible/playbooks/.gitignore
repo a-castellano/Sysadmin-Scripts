@@ -1,0 +1,9 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!setup_lamp_with_varnish
+!setup_lamp_with_varnish_icinga2
+!setup_lemp_test_server
+!setup_test_server
+!setup_icinga2client
