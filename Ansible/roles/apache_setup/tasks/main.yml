@@ -61,6 +61,11 @@
       - apache_setup
       - conf_files
 
+  - name: /var/www belongs to www-data group
+    file: path=/var/www state=directory owner=www-data group=www-data mode=0775
+    tags:
+      - apache_setup
+
   - name: restart apache module
     service: name=apache2 state=restarted
     tags:
