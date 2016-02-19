@@ -1,0 +1,14 @@
+---
+  - name: install required packages for composer
+    apt: pkg={{item}} state=present
+    with_items:
+      - curl
+      - php5-cli
+    tags:
+      - composer
+      - packages
+
+  - name: install composer
+    shell: curl -sS https://getcomposer.org/installer |  php -- --install-dir=/usr/local/bin --filename=composer
+    tags:
+      - composer
