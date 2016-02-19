@@ -1,0 +1,13 @@
+---
+  - name: install supervisor package
+    apt: pkg=supervisor state=present
+    tags:
+      - supervisor
+      - packages
+
+  - name: set supervisorctl config
+    template: src=../templates/supervisord.conf.j2 dest=/etc/supervisor/supervisord.conf owner=root group=root
+    notify: restart supervisor
+    tags:
+      - supervisor
+      - config
