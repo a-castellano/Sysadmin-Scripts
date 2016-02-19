@@ -219,7 +219,7 @@
 
   - name: check apache2
     lineinfile: dest=/etc/monit/monitrc line="check process apache2 with pidfile /var/run/apache2/apache2.pid"
-    when: monit_check_system and monit_check_apache2 and ansible_distribution == "Ubuntu"
+    when: monit_check_system and monit_check_apache2
 
   - name: check apache2 start - Ubuntu
     lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/apache2 start\""
@@ -262,6 +262,34 @@
   - name: check apache2 CPU restart
     lineinfile: dest=/etc/monit/monitrc line="\tif cpu > {{ monit_check_apache2_cpu_value | default('80%') }} for {{ monit_check_apache2_cpu_cycles | default(20) }} cycles then restart"
     when: monit_check_system and monit_check_mysql and monit_check_apache2_cpu_restart
+
+  - name: check tinyproxy
+    lineinfile: dest=/etc/monit/monitrc line="check process tinyproxy with pidfile /var/run/tinyproxy/tinyproxy.pid"
+    when: monit_check_system and monit_check_tinyproxy
+
+  - name: check tinyproxy start - Ubuntu
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"/etc/init.d/tinyproxy start\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Ubuntu"
+
+  - name: check tinyproxy start - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstart program = \"systemctl start tinyproxy.service\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check tinyproxy stop - Ubuntu
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"/etc/init.d/tinyproxy stop\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Ubuntu"
+
+  - name: check tinyproxy stop - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\tstop program = \"systemctl stop tinyproxy.service\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
+
+  - name: check tinyproxy restart - Ubuntu
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"/etc/init.d/tinyproxy restart\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Ubuntu"
+
+  - name: check tinyproxy restart - Debian 8
+    lineinfile: dest=/etc/monit/monitrc line="\trestart program = \"systemctl restart tinyproxy.service\""
+    when: monit_check_system and monit_check_tinyproxy and ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
 
   - name: restart monit
     service: name=monit state=restarted
