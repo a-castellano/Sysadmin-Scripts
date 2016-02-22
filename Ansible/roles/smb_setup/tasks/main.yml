@@ -1,0 +1,59 @@
+---
+  - name: install smb required packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - samba
+      - samba-common
+      - python-glade2
+      - samba-common-bin
+    tags:
+      - smb
+      - packages
+
+  - name: install system-config-samba - Ubuntu
+    apt: pkg={{item}} state=present
+    with_items:
+      - system-config-samba
+    when: ansible_distribution == "Ubuntu"
+    tags:
+      - smb
+      - packages
+
+  - name: set smb configuration
+    template: src=../templates/smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode=0644
+    tags:
+      - smb
+      - config
+
+  - name: Set www folder sharing
+    lineinfile:
+      dest: /etc/samba/smb.conf
+      line: "{{ item.line }}"
+    with_items:
+      - { line: "[www]" }
+      - { line: "   comment = www" }
+      - { line: "   path = /var/www" }
+      - { line: "   guest ok =yes" }
+      - { line: "   browseable = yes" }
+      - { line: "   force create mode = 0777" }
+      - { line: "   force directory mode 0644" }
+      - { line: "   writable=yes" }
+      - { line: "   valid users={{samba_www_users}}" }
+      - { line: "   oplocks = False" }
+      - { line: "   level2 oplocks = False" }
+    when: samba_www_folder is defined
+
+  - name: BBB
+    debug: msg="{{item.name}}"
+    with_items: samba_users
+    when: samba_users is defined
+
+  - name: Create Samba users if they don't exist yet
+    shell: >
+      (pdbedit -L | grep {{ item.name }} 2>&1 > /dev/null) \
+      || (echo {{ item.pass }}; echo {{ item.pass }}) \
+      | smbpasswd -s -a {{ item.name }}
+    with_items: samba_users
+    when: samba_users is defined
+    tags: samba
+
