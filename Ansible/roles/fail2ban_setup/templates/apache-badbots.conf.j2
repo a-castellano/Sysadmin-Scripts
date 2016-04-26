@@ -1,0 +1,9 @@
+[apache-badbots]
+
+enabled  = true
+port     = {{ apache_default_port | default("http") }},https
+filter   = apache-badbots
+logpath  = /var/log/apache*/*error.log
+maxretry = {{ fail2ban_apachebadbots_maxretry | default(10) }}
+findtime = {{ fail2ban_apachebadbots_findtime | default(30) }}
+bantime = {{ fail2ban_apachebadbots_bantime | default(60) }}

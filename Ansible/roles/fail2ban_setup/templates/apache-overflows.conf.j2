@@ -1,0 +1,9 @@
+[apache-overflows]
+
+enabled  = true
+port     = {{ apache_default_port | default("http") }},https
+filter   = apache-overflows
+logpath  = /var/log/apache*/*error.log
+maxretry = {{ fail2ban_apacheoverflow_maxretry | default(10) }}
+findtime = {{ fail2ban_apacheoverflow_findtime | default(30) }}
+bantime = {{ fail2ban_apacheoverflow_bantime | default(60) }}

@@ -1,0 +1,10 @@
+[ssh-iptables-ipset4]
+
+enabled  = true 
+port     = ssh 
+filter   = sshd 
+banaction = iptables-ipset-proto4 
+logpath  = /var/log/sshd.log
+maxretry = {{ fail2ban_sshipset4_maxretry | default(3) }}
+findtime = {{ fail2ban_sshipset4_findtime | default(30) }}
+bantime = {{ fail2ban_sshipset4_bantime | default(60) }}

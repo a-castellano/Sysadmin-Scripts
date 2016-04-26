@@ -1,0 +1,9 @@
+[php-url-fopen]
+
+enabled = true
+port     = {{ apache_default_port | default("http") }},https
+filter  = php-url-fopen
+logpath = /var/log/apache*/*access.log
+maxretry = {{ fail2ban_phpurlfopen_maxretry | default(10) }}
+findtime = {{ fail2ban_phpurlfopen_findtime | default(30) }}
+bantime = {{ fail2ban_phpurlfopen_bantime | default(60) }}

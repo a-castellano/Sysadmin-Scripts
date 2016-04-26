@@ -1,0 +1,9 @@
+[apache]
+
+enabled  = true
+port     = {{ apache_default_port | default("http") }},https
+filter   = apache-auth
+logpath  = /var/log/apache*/*error.log
+maxretry = {{ fail2ban_apache_maxretry | default(10) }}
+findtime = {{ fail2ban_apache_findtime | default(30) }}
+bantime = {{ fail2ban_apache_bantime | default(60) }}

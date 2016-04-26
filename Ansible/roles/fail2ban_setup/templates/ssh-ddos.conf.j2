@@ -1,0 +1,9 @@
+[ssh-ddos]
+
+enabled  = true
+port     = ssh
+filter   = sshd-ddos
+logpath  = /var/log/auth.log
+maxretry = {{ fail2ban_sshddos_maxretry | default(3) }}
+findtime = {{ fail2ban_sshddos_findtime | default(30) }}
+bantime = {{ fail2ban_sshddos_bantime | default(60) }}

@@ -1,0 +1,10 @@
+[ssh-iptables-ipset6]
+
+enabled  = false 
+port     = ssh 
+filter   = sshd 
+banaction = iptables-ipset-proto6
+logpath  = /var/log/sshd.log
+maxretry = {{ fail2ban_sshipset6_maxretry | default(3) }}
+findtime = {{ fail2ban_sshipset6_findtime | default(30) }}
+bantime = {{ fail2ban_sshipset6_bantime | default(60) }}

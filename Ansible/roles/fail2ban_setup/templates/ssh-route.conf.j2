@@ -1,0 +1,9 @@
+[ssh-route]
+
+enabled = true
+filter = sshd 
+action = route 
+logpath = /var/log/sshd.log 
+maxretry = {{ fail2ban_sshroute_maxretry | default(3) }}
+findtime = {{ fail2ban_sshroute_findtime | default(30) }}
+bantime = {{ fail2ban_sshroute_bantime | default(60) }}
