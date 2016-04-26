@@ -11,3 +11,8 @@
     tags:
       - supervisor
       - config
+
+  - name: enable supervisorctl service
+    service: name=supervisor enabled=yes
+    tags:
+      - supervisor

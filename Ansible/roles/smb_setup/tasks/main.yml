@@ -21,6 +21,7 @@
 
   - name: set smb configuration
     template: src=../templates/smb.conf.j2 dest=/etc/samba/smb.conf owner=root group=root mode=0644
+    notify: restart samba
     tags:
       - smb
       - config
@@ -42,11 +43,11 @@
       - { line: "   oplocks = False" }
       - { line: "   level2 oplocks = False" }
     when: samba_www_folder is defined
+    notify: restart samba
+    tags:
+      - smb
+      - config
 
-  - name: BBB
-    debug: msg="{{item.name}}"
-    with_items: samba_users
-    when: samba_users is defined
 
   - name: Create Samba users if they don't exist yet
     shell: >
@@ -55,5 +56,8 @@
       | smbpasswd -s -a {{ item.name }}
     with_items: samba_users
     when: samba_users is defined
-    tags: samba
+    notify: restart samba
+    tags:
+      - smb
+      - config
 

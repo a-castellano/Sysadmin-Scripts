@@ -1,0 +1,9 @@
+#https://wiki.debian.org/Bind9
+  - name: install bind9 packages
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - bind9
+      - bind9-doc
+    tags:
+      - bind9_setup
+      - packages

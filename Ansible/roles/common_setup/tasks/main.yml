@@ -34,12 +34,18 @@
       - htop
       - screen
       - git
-      - mailutils
       - unzip
       - sudo
+      - tree
     tags: 
       - common
       - packages
+
+  - name: Install Ubuntu mailutils
+    apt: pkg={{item}} state=present
+    with_items:
+      - mailutils
+    when: ansible_distribution == "Ubuntu"
 
   - name: change hostname
     hostname: name="{{ server_hostname }}"

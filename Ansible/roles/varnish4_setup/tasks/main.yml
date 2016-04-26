@@ -60,13 +60,13 @@
       - varnish_setup
       - packages
 
-  - name: set varnish defult - Ubuntu 14.04
+  - name: set varnish default - Ubuntu 14.04
     template: src=../templates/default_varnish.j2 dest=/etc/default/varnish
-    when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'trusty'
+    #:when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'trusty'
     tags:
       - varnish_setup
 
-  - name: set varnish defult - Debian 8
+  - name: set varnish default - Debian 8
     template: src=../templates/varnish.service.j2 dest=/lib/systemd/system/varnish.service
     when: ansible_distribution == "Debian" and ansible_distribution_release == 'jessie'
     tags:

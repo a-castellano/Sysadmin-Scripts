@@ -1,3 +1,4 @@
+---
   - name: Create user groups with (uid is defined)
     group: name="{{item.username}}" gid="{{item.uid}}"
     with_items: users
@@ -76,11 +77,26 @@
     tags: 
       - create users
 
-  - name: add user to sudoers files
-    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL'"
+  - name: user not in sudoers
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL' state=absent"
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL' state=absent"
     with_items: users
-    when: item.sudo is defined
+    when: not item.sudo
+    tags:
+      - create users
+
+  - name: add user to sudoers files
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL' state=absent"
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL'"
+    with_items: users
+    when: item.sudo and not item.freesudo
     tags: 
       - create users
 
-
+  - name: add user to sudoers files
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL' state=absent"
+    lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL'"
+    with_items: users
+    when: item.sudo and item.freesudo
+    tags:
+      - create users

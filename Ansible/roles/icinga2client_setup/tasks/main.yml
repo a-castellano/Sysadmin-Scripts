@@ -11,6 +11,7 @@
 
   - name: add icinga repo
     apt_repository: repo='ppa:formorer/icinga'
+    when: ansible_distribution == "Ubuntu"
 
   - name: update apt
     apt: update_cache=yes
