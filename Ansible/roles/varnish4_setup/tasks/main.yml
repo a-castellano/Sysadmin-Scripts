@@ -87,3 +87,9 @@
   - name: set varnish defult.vcl
     template: src={{ varnish_default_vcl_location | default('../templates/default.vcl.j2') }} dest=/etc/varnish/default.vcl
     notify: restart varnish
+
+  - name: varnishncsa.log
+    lineinfile: dest=/etc/rc.local line='varnishncsa -a -w /var/log/varnish/varnishncsa.log -D -P /var/run/varnishncsa.pid' state=present
+    when: varnishlog is defined
+    tags:
+      - varnish_setup
