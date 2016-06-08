@@ -1,0 +1,12 @@
+[wordpress]
+
+enabled = true
+filter = wordpress
+logpath = /var/log/auth.log
+port     = {{ apache_default_port | default("http") }},https
+maxretry = {{ fail2ban_wordpress_maxretry | default(10) }}
+findtime = {{ fail2ban_wordpress_findtime | default(300) }}
+bantime = {{ fail2ban_wordpress_bantime | default(600) }}
+
+
+# Fail2ban Wordpress plugin is needed ->  https://wordpress.org/plugins/wp-fail2ban/

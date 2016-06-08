@@ -1,0 +1,9 @@
+[mysqld-auth]  
+
+enabled  = true
+filter   = mysqld-auth
+port     = {{ mysql_client_port | default(3306) }}
+logpath  = /var/log/mysql/error.log
+maxretry = {{ fail2ban_mysql_maxretry | default(10) }}
+findtime = {{ fail2ban_mysql_findtime | default(30) }}
+bantime = {{ fail2ban_mysql_bantime | default(600) }}

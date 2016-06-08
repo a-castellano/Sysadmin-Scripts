@@ -33,6 +33,9 @@ query_cache_limit       = {{ mysqld_query_cache_limit | default("1M") }}
 query_cache_size        = {{ mysqld_query_cache_size | default("16M") }}
 
 log_error = {{ mysqld_log_error | default("/var/log/mysql/error.log") }}
+log-warning = 2
+general_log_file        = {{ mysqld_general_error | default("/var/log/mysql/mysql.log") }}
+general_log             = {{ mysqld_general_error_enabled | default(0) }}
 
 #log_slow_queries       = /var/log/mysql/mysql-slow.log
 #long_query_time = 2

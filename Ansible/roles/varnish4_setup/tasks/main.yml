@@ -88,8 +88,20 @@
     template: src={{ varnish_default_vcl_location | default('../templates/default.vcl.j2') }} dest=/etc/varnish/default.vcl
     notify: restart varnish
 
+  - name: varnishncsa.log delete exit
+    lineinfile: dest=/etc/rc.local line='exit 0' state=absent
+    when: varnishlog is defined
+    tags:
+      - varnish_setup
+
   - name: varnishncsa.log
     lineinfile: dest=/etc/rc.local line='varnishncsa -a -w /var/log/varnish/varnishncsa.log -D -P /var/run/varnishncsa.pid' state=present
+    when: varnishlog is defined
+    tags:
+      - varnish_setup
+
+  - name: varnishncsa.log add exit on rc.local
+    lineinfile: dest=/etc/rc.local line='exit 0' state=present
     when: varnishlog is defined
     tags:
       - varnish_setup

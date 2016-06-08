@@ -1,0 +1,9 @@
+[nginx-http-auth]
+
+  enabled = true
+ filter  = nginx-http-auth
+port     = {{ nginx_default_port | default("http") }},https
+ logpath = /var/log/nginx/error.log
+maxretry = {{ fail2ban_nginx_maxretry | default(10) }}
+findtime = {{ fail2ban_nginx_findtime | default(30) }}
+bantime = {{ fail2ban_nginx_bantime | default(60) }}

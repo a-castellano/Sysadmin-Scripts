@@ -1,12 +1,4 @@
-  - name: install fail2ban package
-    apt: name={{item}} state=installed update_cache=yes
-    with_items:
-      - fail2ban
-      - python-pyinotify
-      - ipset
-    tags:
-      - fail2ban
-      - packages
+
 
   - name: remove previous jail.d configurations
     file: path=/etc/fail2ban/jail.d state=absent
@@ -56,6 +48,50 @@
   - name: php-url-fopen jail
     template: src=../templates/php-url-fopen.conf.j2 dest=/etc/fail2ban/jail.d/php-url-fopen.conf mode=0422 owner=root group=root
     when: fail2ban_phpurlfopen is defined
+
+  - name: download wordpress filter
+    get_url: url=https://plugins.svn.wordpress.org/wp-fail2ban/trunk/wordpress-hard.conf dest=/etc/fail2ban/filter.d/wordpress.conf validate_certs=no mode=0422 owner=root group=root
+    when: fail2ban_wordpress is defined
+
+  - name: wordpress jail
+    template: src=../templates/wordpress.conf.j2 dest=/etc/fail2ban/jail.d/wordpress.conf mode=0422 owner=root group=root
+    when: fail2ban_wordpress is defined
+
+  - name: nginx jail
+    template: src=../templates/nginx.conf.j2 dest=/etc/fail2ban/jail.d/nginx.conf mode=0422 owner=root group=root
+    when: fail2ban_nginx is defined
+
+  - name: dovecot jail
+    template: src=../templates/dovecot.conf.j2 dest=/etc/fail2ban/jail.d/dovecot.conf mode=0422 owner=root group=root
+    when: fail2ban_dovecot is defined
+
+  - name: mysql jail
+    template: src=../templates/mysql.conf.j2 dest=/etc/fail2ban/jail.d/mysql.conf mode=0422 owner=root group=root
+    when: fail2ban_mysql is defined
+
+  - name: varnish http-get-ddos filter
+    template: src=../templates/filter-http-get-ddos.conf.j2 dest=/etc/fail2ban/filter.d/http-get-ddos.conf mode=0422 owner=root group=root
+    when: fail2ban_varnish_httpddos is defined
+
+  - name: varnish http-get-ddos jail
+    template: src=../templates/http-get-ddos.conf.j2 dest=/etc/fail2ban/jail.d/http-get-ddos.conf mode=0422 owner=root group=root
+    when: fail2ban_varnish_httpddos is defined
+
+  - name: wordpress wp-login filter
+    template: src=../templates/filter-apache-wplogin.conf.j2 dest=/etc/fail2ban/filter.d/apache-wplogin.conf mode=0422 owner=root group=root
+    when: fail2ban_wordpresslogin is defined
+
+  - name: wordpress wp-login jail
+    template: src=../templates/apache-wplogin.conf.j2 dest=/etc/fail2ban/jail.d/apache-wplogin.conf mode=0422 owner=root group=root
+    when: fail2ban_wordpresslogin is defined
+
+  - name: wordpress xmlrpc filter
+    template: src=../templates/filter-xmlrpc.conf.j2 dest=/etc/fail2ban/filter.d/xmlrpc.conf mode=0422 owner=root group=root
+    when: fail2ban_xmlrpc is defined
+
+  - name: wordpress xmlrpc jail
+    template: src=../templates/xmlrpc.conf.j2 dest=/etc/fail2ban/jail.d/xmlrpc.conf mode=0422 owner=root group=root
+    when: fail2ban_xmlrpc is defined
 
   - name: enable fail2ban
     service: name=fail2ban enabled=yes

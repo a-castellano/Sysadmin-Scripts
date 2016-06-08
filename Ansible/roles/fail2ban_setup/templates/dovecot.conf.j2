@@ -1,0 +1,9 @@
+[dovecot]  
+
+enabled = true
+ port    = smtp,ssmtp,submission,imap2,imap3,imaps,pop3,pop3s 
+filter  = dovecot 
+logpath = /var/log/mail.log
+maxretry = {{ fail2ban_dovecot_maxretry | default(10) }}
+findtime = {{ fail2ban_dovecot_findtime | default(300) }}
+bantime = {{ fail2ban_dovecot_bantime | default(60) }}

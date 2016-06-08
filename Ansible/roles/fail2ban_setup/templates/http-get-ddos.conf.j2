@@ -1,0 +1,10 @@
+[http-get-ddos]
+
+enabled = true
+port     = {{ varnish_port | default("http") }}
+filter = http-get-ddos
+logpath = /var/log/varnish/varnishncsa.log
+action    = %(action_mwl)s
+maxretry = {{ fail2ban_varnish_httpddos_maxretry | default(4000) }}
+findtime = {{ fail2ban_varnish_httpddos_findtime | default(60) }}
+bantime = {{ fail2ban_varnish_httpddos_bantime | default(3600) }}

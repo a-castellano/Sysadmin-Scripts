@@ -1,0 +1,9 @@
+[xmlrpc]
+
+enabled  = true
+port     = 80,443
+filter   = xmlrpc
+logpath  = {{ fail2ban_xmlrpc_log | default("") }}
+maxretry = {{ fail2ban_xmlrpc_maxretry | default(36000) }}
+findtime = {{ fail2ban_xmlrpc_findtime | default(36000) }}
+bantime = {{ fail2ban_xmlrpc_bantime | default(36000) }}

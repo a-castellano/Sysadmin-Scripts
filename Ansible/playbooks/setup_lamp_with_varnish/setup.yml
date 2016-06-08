@@ -1,16 +1,17 @@
 ---
 
-  - hosts: test
+  - hosts: lamp
 
     vars_files:
       - ../../vars/target_hosts/LAMPwithVarnish.yml
 
     roles:
-      - { role: ../../roles/common_setup}
-      - { role: ../../roles/create_user}
-      - { role: ../../roles/keyscan}
-      - { role: ../../roles/apache_setup}
-      - { role: ../../roles/php_setup}
-      - { role: ../../roles/mysql_setup}
-      - { role: ../../roles/varnish_setup}
-      - { role: ../../roles/monit_setup}
+      #- { role: ../../roles/common_setup}
+      #- { role: ../../roles/create_user}
+      #- { role: ../../roles/keyscan}
+      #- { role: ../../roles/apache_setup}
+      #- { role: ../../roles/php_setup}
+      #- { role: ../../roles/mysql_setup}
+      #- { role: ../../roles/varnish4_setup}
+      #- { role: ../../roles/monit_setup}
+      - { role: ../../roles/fail2ban_setup}
