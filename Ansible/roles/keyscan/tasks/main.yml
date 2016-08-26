@@ -17,6 +17,7 @@
   - name: delete users known_hosts
     file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=absent
     with_items: users
+    when: users is defined
     tags:
       - keyscan
 
@@ -29,12 +30,14 @@
   - name: create users known_hosts
     file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=touch owner={{item.username}} group={{item.username}}
     with_items: users
+    when: users is defined
     tags:
       - keyscan
 
   - name: create users known_hosts
     file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh/known_hosts state=touch owner={{item.username}} group={{item.username}}
     with_items: users
+    when: users is defined
     tags:
       - keyscan
 
@@ -45,5 +48,6 @@
     with_nested:
       - users
       - servers
+    when: users is defined
     tags: 
       - keyscan
