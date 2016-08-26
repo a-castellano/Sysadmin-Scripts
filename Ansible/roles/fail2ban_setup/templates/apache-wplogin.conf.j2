@@ -6,3 +6,4 @@ logpath  = /var/log/apache*/*access.log
 maxretry = {{ fail2ban_wordpresslogin_maxretry | default(100) }}
 findtime = {{ fail2ban_wordpresslogin_findtime | default(600) }}
 bantime = {{ fail2ban_wordpresslogin_bantime | default(3600) }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}

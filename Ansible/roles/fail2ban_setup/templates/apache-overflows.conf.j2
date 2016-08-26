@@ -7,3 +7,4 @@ logpath  = /var/log/apache*/*error.log
 maxretry = {{ fail2ban_apacheoverflow_maxretry | default(10) }}
 findtime = {{ fail2ban_apacheoverflow_findtime | default(30) }}
 bantime = {{ fail2ban_apacheoverflow_bantime | default(60) }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}

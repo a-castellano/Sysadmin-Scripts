@@ -7,3 +7,5 @@ logpath = /var/log/mail.log
 maxretry = {{ fail2ban_dovecot_maxretry | default(10) }}
 findtime = {{ fail2ban_dovecot_findtime | default(300) }}
 bantime = {{ fail2ban_dovecot_bantime | default(60) }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}

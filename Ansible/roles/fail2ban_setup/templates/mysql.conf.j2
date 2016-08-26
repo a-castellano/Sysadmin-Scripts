@@ -7,3 +7,4 @@ logpath  = /var/log/mysql/error.log
 maxretry = {{ fail2ban_mysql_maxretry | default(10) }}
 findtime = {{ fail2ban_mysql_findtime | default(30) }}
 bantime = {{ fail2ban_mysql_bantime | default(600) }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}

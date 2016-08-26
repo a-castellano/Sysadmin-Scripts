@@ -1,0 +1,38 @@
+[INCLUDES]
+
+before = iptables-blocktype.conf
+
+[Definition]
+
+
+actionstart = iptables -N fail2ban-<name>
+              iptables -A fail2ban-<name> -j RETURN
+              iptables -I <chain> -p <protocol> -m multiport --dports <port> -j fail2ban-<name>
+              cat /etc/fail2ban/persistent.bans | awk '/^fail2ban-<name>/ {print $2}' \
+              | while read IP; do iptables -I fail2ban-<name> 1 -s $IP -j <blocktype>; done
+
+actionstop = iptables -D <chain> -p <protocol> -m multiport --dports <port> -j fail2ban-<name>
+             iptables -F fail2ban-<name>
+             iptables -X fail2ban-<name>
+
+
+actioncheck = iptables -n -L <chain> | grep -q 'fail2ban-<name>[ \t]'
+
+
+actionban = iptables -I fail2ban-<name> 1 -s <ip> -j <blocktype>
+            echo "fail2ban-<name> <ip>" >> /etc/fail2ban/persistent.bans
+
+actionunban = iptables -D fail2ban-<name> -s <ip> -j <blocktype>
+
+[Init]
+
+
+name = default
+
+
+port = ssh
+
+
+protocol = tcp
+
+chain = INPUT

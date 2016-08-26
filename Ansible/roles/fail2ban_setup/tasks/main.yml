@@ -13,41 +13,81 @@
     template: src=../templates/ssh.conf.j2 dest=/etc/fail2ban/jail.d/ssh.conf mode=0422 owner=root group=root
     when: fail2ban_ssh is defined
 
+  - name: ssh jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/ssh.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_ssh is defined
+
   - name: shh-ddos jail
     template: src=../templates/ssh-ddos.conf.j2 dest=/etc/fail2ban/jail.d/ssh-ddos.conf mode=0422 owner=root group=root
+    when: fail2ban_sshddos is defined
+
+  - name: shh-ddos jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/ssh-ddos.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_sshddos is defined
 
   - name: shh-route jail
     template: src=../templates/ssh-route.conf.j2 dest=/etc/fail2ban/jail.d/ssh-route.conf mode=0422 owner=root group=root
     when: fail2ban_sshroute is defined
 
+  - name: shh-route jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/ssh-route.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_sshroute is defined
+
   - name: ssh-iptables-ipset4 jail
     template: src=../templates/ssh-iptables-ipset4.conf.j2 dest=/etc/fail2ban/jail.d/ssh-iptables-ipset4.conf mode=0422 owner=root group=root
+    when: fail2ban_sshipset4 is defined
+
+  - name: ssh-iptables-ipset4 jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/ssh-iptables-ipset4.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_sshipset4 is defined
 
   - name: ssh-iptables-ipset6 jail
     template: src=../templates/ssh-iptables-ipset6.conf.j2 dest=/etc/fail2ban/jail.d/ssh-iptables-ipset6.conf mode=0422 owner=root group=root
     when: fail2ban_sshipset6 is defined
 
+  - name: ssh-iptables-ipset6 jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/ssh-iptables-ipset6.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_sshipset6 is defined
+
   - name: apache jail
     template: src=../templates/apache2.conf.j2 dest=/etc/fail2ban/jail.d/apache2.conf mode=0422 owner=root group=root
+    when: fail2ban_apache is defined
+
+  - name: apache jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache2.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_apache is defined
 
   - name: apache-overflow jail
     template: src=../templates/apache-overflows.conf.j2 dest=/etc/fail2ban/jail.d/apache-overflows.conf mode=0422 owner=root group=root
     when: fail2ban_apacheoverflow is defined
 
+  - name: apache-overflow jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache-overflows.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_apacheoverflow is defined
+
   - name: apache-badbots jail
     template: src=../templates/apache-badbots.conf.j2 dest=/etc/fail2ban/jail.d/apache-badbots.conf mode=0422 owner=root group=root
-    when: fail2ban_apacheoverflow is defined
+    when: fail2ban_apachebadbots is defined
+
+  - name: apache-badbots jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache-badbots.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_apachebadbots is defined
 
   - name: apache-nohome jail
     template: src=../templates/apache-nohome.conf.j2 dest=/etc/fail2ban/jail.d/apache-nohome.conf mode=0422 owner=root group=root
     when: fail2ban_apachenohome is defined
 
+  - name: apache-nohome jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache-nohome.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_apachenohome is defined
+
   - name: php-url-fopen jail
     template: src=../templates/php-url-fopen.conf.j2 dest=/etc/fail2ban/jail.d/php-url-fopen.conf mode=0422 owner=root group=root
     when: fail2ban_phpurlfopen is defined
+
+  - name: apache-nohome jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache-nohome.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_apachenohome is defined
 
   - name: download wordpress filter
     get_url: url=https://plugins.svn.wordpress.org/wp-fail2ban/trunk/wordpress-hard.conf dest=/etc/fail2ban/filter.d/wordpress.conf validate_certs=no mode=0422 owner=root group=root
@@ -57,16 +97,32 @@
     template: src=../templates/wordpress.conf.j2 dest=/etc/fail2ban/jail.d/wordpress.conf mode=0422 owner=root group=root
     when: fail2ban_wordpress is defined
 
+  - name: wordpress jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/wordpress.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_wordpress is defined
+
   - name: nginx jail
     template: src=../templates/nginx.conf.j2 dest=/etc/fail2ban/jail.d/nginx.conf mode=0422 owner=root group=root
+    when: fail2ban_nginx is defined
+
+  - name: nginx jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/nginx.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_nginx is defined
 
   - name: dovecot jail
     template: src=../templates/dovecot.conf.j2 dest=/etc/fail2ban/jail.d/dovecot.conf mode=0422 owner=root group=root
     when: fail2ban_dovecot is defined
 
+  - name: dovecot jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/dovecot.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_dovecot is defined
+
   - name: mysql jail
     template: src=../templates/mysql.conf.j2 dest=/etc/fail2ban/jail.d/mysql.conf mode=0422 owner=root group=root
+    when: fail2ban_mysql is defined
+
+  - name: mysql jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/mysql.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_mysql is defined
 
   - name: varnish http-get-ddos filter
@@ -77,12 +133,20 @@
     template: src=../templates/http-get-ddos.conf.j2 dest=/etc/fail2ban/jail.d/http-get-ddos.conf mode=0422 owner=root group=root
     when: fail2ban_varnish_httpddos is defined
 
+  - name: varnish http-get-ddos jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/http-get-ddos.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_varnish_httpddos is defined
+
   - name: wordpress wp-login filter
     template: src=../templates/filter-apache-wplogin.conf.j2 dest=/etc/fail2ban/filter.d/apache-wplogin.conf mode=0422 owner=root group=root
     when: fail2ban_wordpresslogin is defined
 
   - name: wordpress wp-login jail
     template: src=../templates/apache-wplogin.conf.j2 dest=/etc/fail2ban/jail.d/apache-wplogin.conf mode=0422 owner=root group=root
+    when: fail2ban_wordpresslogin is defined
+
+  - name: wordpress wp-login jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/apache-wplogin.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
     when: fail2ban_wordpresslogin is defined
 
   - name: wordpress xmlrpc filter
@@ -92,6 +156,14 @@
   - name: wordpress xmlrpc jail
     template: src=../templates/xmlrpc.conf.j2 dest=/etc/fail2ban/jail.d/xmlrpc.conf mode=0422 owner=root group=root
     when: fail2ban_xmlrpc is defined
+
+  - name: wordpress xmlrpc jail ignoreip
+    lineinfile: dest=/etc/fail2ban/jail.d/xmlrpc.conf regexp="^ignoreip = " line="ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}"
+    when: fail2ban_xmlrpc is defined
+
+  - name: persistent
+    template: src=../templates/iptables-multiport.conf.j2 dest=/etc/fail2ban/action.d/iptables-multiport.conf mode=0422 owner=root group=root
+    when: fail2ban_persistent is defined
 
   - name: enable fail2ban
     service: name=fail2ban enabled=yes

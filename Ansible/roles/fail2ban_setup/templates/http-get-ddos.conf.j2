@@ -8,3 +8,4 @@ action    = %(action_mwl)s
 maxretry = {{ fail2ban_varnish_httpddos_maxretry | default(4000) }}
 findtime = {{ fail2ban_varnish_httpddos_findtime | default(60) }}
 bantime = {{ fail2ban_varnish_httpddos_bantime | default(3600) }}
+ignoreip = 127.0.0.1/8 {{ fail2ban_ignoreip | default("") }}
