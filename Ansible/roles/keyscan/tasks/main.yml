@@ -24,6 +24,7 @@
   - name: create users .ssh folder
     file: path={{item.home if item.home is defined else '/home/'+item.username}}/.ssh state=directory owner={{item.username}} group={{item.username}}
     with_items: users
+    when: users is defined
     tags:
       - keyscan
 
