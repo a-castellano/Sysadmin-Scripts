@@ -1,0 +1,13 @@
+---
+
+  - hosts: Jericho
+
+    vars_files:
+      - ../../vars/target_hosts/Jericho.yml
+
+    roles:
+      - { role: ../../roles/common_setup}
+      - { role: ../../roles/zsh_setup}
+      - { role: ../../roles/keyscan}
+      - { role: ../../roles/mariadb_setup}
+      - { role: ../../roles/docker_setup}
