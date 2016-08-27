@@ -1,0 +1,62 @@
+[client]
+port            = {{ mysql_client_port | default(3306) }}
+socket          = {{ mysql_client_socket | default("/var/run/mysqld/mysqld.sock") }}
+
+[mysqld_safe]
+socket          = {{ mysqld_safe_socket | default("/var/run/mysqld/mysqld.sock") }}
+nice            = {{ mysqld_nice | default(0) }}
+
+[mysqld]
+user            = {{ mysqld_user | default("mysql") }}
+pid-file        = {{ mysqld_pid_file | default("/var/run/mysqld/mysqld.pid") }}
+socket          = {{ mysqld_socket | default("/var/run/mysqld/mysqld.sock") }}
+port            = {{ mysqld_port | default(3306) }}
+basedir         = {{ mysqld_basedir | default("/usr") }}
+datadir         = {{ mysqld_datadir | default("/var/lib/mysql") }}
+tmpdir          = {{ mysqld_tmpdir | default("/tmp") }}
+lc-messages-dir = /usr/share/mysql
+skip-external-locking
+
+bind-address            = {{ mysqld_bind_address | default("127.0.0.1") }}
+
+key_buffer              = {{ mysqld_key_buffer | default("16M") }}
+max_allowed_packet      = {{ mysqld_max_allowed_packet | default("16M") }}
+thread_stack            = {{ mysqld_thread_stack | default("192K") }}
+thread_cache_size       = {{ mysqld_thread_cache_size | default(8) }}
+
+myisam-recover         = BACKUP
+#max_connections        = 100
+#table_cache            = 64
+#thread_concurrency     = 10
+
+query_cache_limit       = {{ mysqld_query_cache_limit | default("1M") }}
+query_cache_size        = {{ mysqld_query_cache_size | default("16M") }}
+
+log_error = {{ mysqld_log_error | default("/var/log/mysql/error.log") }}
+log-warning = 2
+general_log_file        = {{ mysqld_general_error | default("/var/log/mysql/mysql.log") }}
+general_log             = {{ mysqld_general_error_enabled | default(0) }}
+
+#log_slow_queries       = /var/log/mysql/mysql-slow.log
+#long_query_time = 2
+#log-queries-not-using-indexes
+
+#server-id              = 1
+#log_bin                        = /var/log/mysql/mysql-bin.log
+expire_logs_days        = {{ mysqld_expire_logs_days | default(10) }}
+max_binlog_size         = {{ mysqld_max_binlog_size | default("100M") }}
+#binlog_do_db           = include_database_name
+#binlog_ignore_db       = include_database_name
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet      = {{ mysqldump_max_allowed_packet | default("16M") }}
+
+[mysql]
+#no-auto-rehash # faster start of mysql but no tab completition
+
+[isamchk]
+key_buffer              = {{ isamchk_key_buffer | default("16M") }}
+
+!includedir /etc/mysql/conf.d/

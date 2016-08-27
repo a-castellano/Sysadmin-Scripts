@@ -1,0 +1,58 @@
+  - name: install mariadb packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - mariadb-server
+      - python-mysqldb
+      - automysqlbackup
+    tags: 
+      - mariadb_setup
+      - packages 
+
+  - name: Start the MySQL services
+    service: name=mysql state=restarted enabled=true
+    tags:
+      - mysql
+
+  - name: update mysql root password for all root accounts
+    mysql_user: 
+      name: root 
+      host: "{{ item }}" 
+      password: "{{ mysql_root_password }}"
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      check_implicit_admin: yes
+      priv: "*.*:ALL,GRANT"
+    with_items:
+      #- "{{ ansible_hostname }}"
+      - 127.0.0.1
+      - ::1
+      - localhost 
+    when: mysql_root_password is defined
+    notify: restart mysql 
+    tags: 
+      - mysql_setup
+      - mysql_password
+
+  - name: enable mysql
+    service: name=mysql state=running
+
+  - name: my.cnf setup
+    template: src=../templates/my.cnf.j2 dest=/etc/mysql/my.cnf
+    tags: 
+      - mysql_setup
+      - mysql_password
+
+  - name: my.cnf root file
+    template: src=../templates/user_my.cnf.j2 dest=/root/.my.cnf owner=root group=root mode=600
+    when: mysql_root_password is defined
+    tags: 
+      - mysql_setup
+      - mysql_password
+
+  - name: my.cnf users (if they are allowed)
+    template: src=../templates/user_my.cnf.j2 dest={{item.home if item.home is defined else '/home/'+item.username}}/.my.cnf owner={{item.username}} group={{item.username}} mode=600
+    with_items: users
+    when: users is defined and item.mysql_access is defined
+    tags: 
+      - mysql_setup
+      - mysql_password
