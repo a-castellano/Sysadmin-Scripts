@@ -1,0 +1,50 @@
+  - name: update apt cache
+    apt: update_cache=yes
+    tags:
+      - flocker_node_setup
+      - update_packages
+
+  - name: install docker required packages
+    apt: pkg={{item}} state=present
+    with_items:
+      - apt-transport-https
+      - software-properties-common
+    tags:
+      - flocker_node_setup
+      - packages
+
+  - name: add flocker_node repository
+    apt_repository: repo="deb https://clusterhq-archive.s3.amazonaws.com/ubuntu/{{ansible_distribution_version}}/$(ARCH) /" state=present
+    tags:
+      - docker_setup
+      - packages
+
+  - name: set /etc/apt/preferences.d/buildbot-700
+    copy: src=../files/buildbot-700 dest=/etc/apt/preferences.d/buildbot-700 owner=root group=root mode=644
+    tags:
+      - docker_setup
+      - packages
+
+  - name: update apt cache
+    apt: update_cache=yes
+    tags:
+      - flocker_node_setup
+      - update_packages
+
+  - name: install flocker_node packages
+    apt: pkg={{item}} state=present force=yes
+    with_items:
+      - clusterhq-flocker-node
+      - clusterhq-flocker-cli
+      - clusterhq-flocker-docker-plugin
+    tags:
+      - flocker_node_setup
+      - packages
+
+  - name: install clusterhq-flocker-docker-plugin
+    apt: pkg={{item}} state=present
+    with_items:
+      - clusterhq-flocker-docker-plugin
+    tags:
+      - flocker_node_setup
+      - packages
