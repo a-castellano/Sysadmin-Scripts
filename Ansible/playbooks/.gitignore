@@ -7,3 +7,4 @@
 !setup_lemp_test_server
 !setup_test_server
 !setup_icinga2client
+!setup_jericho/setup.yml
