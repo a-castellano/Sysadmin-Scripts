@@ -5,7 +5,7 @@
       - docker_setup
       - packages
 
-  - name: install docker requires packages
+  - name: install docker required packages
     apt: pkg={{item}} state=present
     with_items:
       - apt-transport-https
