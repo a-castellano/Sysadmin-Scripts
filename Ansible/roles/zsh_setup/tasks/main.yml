@@ -1,0 +1,22 @@
+  - name: install zsh required packages
+    apt: name={{item}} state=installed update_cache=yes
+    with_items:
+      - zsh
+      - git
+    tags:
+      - zsh_setup
+      - packages
+
+  - name: Clone oh-my-zsh repo
+    git: repo=https://github.com/robbyrussell/oh-my-zsh.git dest=/root/.oh-my-zsh
+    tags:
+      - zsh_setup
+
+  - name: download acastellano zsh theme
+    get_url: url=https://raw.githubusercontent.com/a-castellano/myconfigs/master/zsh/acastellano.zsh-theme dest=/root/.oh-my-zsh/themes/acastellano.zsh-theme mode=644 owner=root group=root
+
+  - name: download .zshrc
+    get_url: url={{ zshrc_config_url | default('https://raw.githubusercontent.com/a-castellano/myconfigs/master/zsh/.zshrc') }} dest=/root/.zshrc mode=644 owner=root group=root
+
+  - name: Set zsh as default shell
+    user: name=root shell=/bin/zsh
