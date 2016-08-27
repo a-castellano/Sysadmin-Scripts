@@ -48,3 +48,6 @@
     tags:
       - flocker_node_setup
       - packages
+
+  - name: create /etc/flocker
+    file: path=/etc/flocker state=directory mode=0755
