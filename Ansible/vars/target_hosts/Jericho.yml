@@ -1,0 +1,36 @@
+---
+  server_hostname: Jericho
+
+  mysql_root_password: password
+  mysql_client_port: 3306
+  mysql_client_socket: "/var/run/mysqld/mysqld.sock"
+  mysqld_safe_socket: "/var/run/mysqld/mysqld.sock"
+  mysqld_nice: 0
+  mysqld_user: "mysql"
+  mysqld_pid_file: "/var/run/mysqld/mysqld.pid"
+  mysqld_socket: "/var/run/mysqld/mysqld.sock"
+  mysqld_port: 3306
+  mysqld_basedir: "/usr"
+  mysqld_datadir: "/var/lib/mysql"
+  mysqld_tmpdir: "/tmp"
+  mysqld_lc-messages-dir: "/usr/share/mysql"
+
+  mysqld_bind_address: "127.0.0.1"
+  mysqld_key_buffer: "16M"
+  mysqld_max_allowed_packet: "16M"
+  mysqld_thread_stack: "192K"
+  mysqld_thread_cache_size: 8
+
+  mysqld_query_cache_limit: "1M"
+  mysqld_query_cache_size: "16M"
+  mysqld_log_error: "/var/log/mysql/error.log"
+
+  mysqld_general_error: "/var/log/mysql/mysql.log"
+  mysqld_general_error_enabled: 1
+
+  mysqld_expire_logs_days: 10
+  mysqld_max_binlog_size: "100M"
+
+  mysqldump_max_allowed_packet: "16M"
+
+  isamchk_key_buffer: "16M"
