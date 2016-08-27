@@ -9,7 +9,7 @@
       - packages 
 
   - name: Start the MySQL services
-    service: name=mysql state=restarted enabled=true
+    service: name=mysql state=restarted
     tags:
       - mysql
 
