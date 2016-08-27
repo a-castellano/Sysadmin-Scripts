@@ -4,7 +4,6 @@
       - python-mysqldb
       - mysql-server
       - mysql-client
-      - php5-mysql
     tags: 
       - mysql_setup
       - packages 
@@ -28,6 +27,9 @@
     tags: 
       - mysql_setup
       - mysql_password
+
+  - name: enable mysql
+    service: name=mysql state=running
 
   - name: my.cnf setup
     template: src=../templates/my.cnf.j2 dest=/etc/mysql/my.cnf
