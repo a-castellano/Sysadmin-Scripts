@@ -1,0 +1,12 @@
+---
+
+  - hosts: Docker
+
+    vars_files:
+      - ../../vars/target_hosts/Docker.yml
+
+    roles:
+      - { role: ../../roles/common_setup}
+      - { role: ../../roles/zsh_setup}
+      - { role: ../../roles/docker_setup}
+      - { role: ../../roles/flocker_node_setup}
