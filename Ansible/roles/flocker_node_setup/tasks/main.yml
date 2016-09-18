@@ -50,4 +50,58 @@
       - packages
 
   - name: create /etc/flocker
-    file: path=/etc/flocker state=directory mode=0755
+    file: path=/etc/flocker state=directory mode=0700
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy cluster.crt
+    copy: src=../files/certificates/cluster.crt dest=/etc/flocker/cluster.crt owner=root group=root mode=600
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy control-{{hostname}}.{{flocker_domain}}.crt
+    copy: src=../files/certificates/control-{{hostname}}.{{flocker_domain}}.crt dest=/etc/flocker/control-service.crt owner=root group=root mode=600
+    when: control is defined
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy control-{{hostname}}.{{flocker_domain}}.key
+    copy: src=../files/certificates/control-{{hostname}}.{{flocker_domain}}.key dest=/etc/flocker/control-service.key owner=root group=root mode=600
+    when: control is defined
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy node.crt
+    copy: src=../files/certificates/{{flocker_id}}.crt dest=/etc/flocker/node.crt owner=root group=root mode=600
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy node.key
+    copy: src=../files/certificates/{{flocker_id}}.key dest=/etc/flocker/node.key owner=root group=root mode=600
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy plugin.crt
+    copy: src=../files/certificates/plugin.crt dest=/etc/flocker/plugin.crt owner=root group=root mode=600
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: copy plugin.key
+    copy: src=../files/certificates/plugin.key dest=/etc/flocker/plugin.key owner=root group=root mode=600
+    tags:
+      - flocker_node_setup
+      - certificates
+
+  - name: enbale flocker-control
+    service: name=flocker-control state=running
+    when: control is defined
+    tags:
+      - flocker_node_setup
+      - service
