@@ -9,5 +9,6 @@
       - { role: ../../roles/common_setup}
       - { role: ../../roles/zsh_setup}
       - { role: ../../roles/keyscan}
-      - { role: ../../roles/mariadb_setup}
+     # - { role: ../../roles/mariadb_setup}
       - { role: ../../roles/docker_setup}
+      - { role: ../../roles/flocker_node_setup}

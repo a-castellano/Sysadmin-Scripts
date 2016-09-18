@@ -8,3 +8,4 @@
 !setup_test_server
 !setup_icinga2client
 !setup_jericho
+!setup_docker/setup.yml
