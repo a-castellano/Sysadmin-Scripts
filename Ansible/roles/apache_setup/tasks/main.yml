@@ -19,6 +19,12 @@
       - apache_setup
       - conf_files
 
+  - name: Create /etc/apache2/conf-enabled
+    file: path=/etc/apache2/conf-enabled state=directory mode=0755
+    tags:
+      - apache_setup
+      - conf_files
+
   - name: Set Apache2 custom.conf
     template: src=../templates/custom.conf.j2 dest=/etc/apache2/conf-enabled/custom.conf
     tags:
