@@ -1,4 +1,11 @@
 ---
+  - name: Create required groups
+    group: name="{{item}}" state=present
+    with_items: usergroups
+    when: usergroups is defined
+    tags:
+      - create users
+
   - name: Create user groups with (uid is defined)
     group: name="{{item.username}}" gid="{{item.uid}}"
     with_items: users
@@ -36,8 +43,20 @@
           shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
-    when: item.uid is not defined
+    when: item.uid is not defined and item.groups is defined
     tags: 
+      - create users
+
+  - name: Create users (uid is not defined) groups neither
+    user: name="{{item.username}}"
+          group="{{item.username}}"
+          password="{{item.password if item.password is defined else '!'}}"
+          comment="{{item.name if item.name is defined else ''}}"
+          shell="{{item.shell if item.shell is defined else '/bin/bash'}}"
+          home="{{item.home if item.home is defined else '/home/'+item.username}}"
+    with_items: users
+    when: item.uid is not defined and item.groups is not defined
+    tags:
       - create users
 
   - name: insert authorized ssh keys if exists
@@ -45,7 +64,9 @@
     with_subelements:
       - users
       - authorized_keys
-    when: item.1 is defined
+      - flags:
+        skip_missing: true
+    when: item.1
     tags:
       - create users
 
@@ -81,7 +102,7 @@
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL' state=absent"
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL' state=absent"
     with_items: users
-    when: not item.sudo
+    when: item.sudo is defined and not item.sudo
     tags:
       - create users
 
@@ -89,7 +110,7 @@
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL' state=absent"
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL'"
     with_items: users
-    when: item.sudo and not item.freesudo
+    when: item.sudo is defined and item.freesudo is defined and item.sudo and not item.freesudo
     tags: 
       - create users
 
@@ -97,6 +118,6 @@
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) ALL' state=absent"
     lineinfile: "dest=/etc/sudoers state=present line='{{item.username}} ALL=(ALL) NOPASSWD: ALL'"
     with_items: users
-    when: item.sudo and item.freesudo
+    when: item.sudo is defined and item.freesudo is defined and item.sudo and item.freesudo
     tags:
       - create users
