@@ -20,6 +20,13 @@
     tags: 
       - create users
 
+  - name: Create user home folder if it is defined
+    file: path="{{item.home}}" state=directory
+    with_items: users
+    when: item.home is defined
+    tags:
+      - create users
+
   - name: Create users (uid is defined)
     user: name="{{item.username}}"
           group="{{item.username}}"
@@ -56,6 +63,13 @@
           home="{{item.home if item.home is defined else '/home/'+item.username}}"
     with_items: users
     when: item.uid is not defined and item.groups is not defined
+    tags:
+      - create users
+
+  - name: Change user home permission folder if it is defined
+    file: path="{{item.home}}" state=directory owner="{{item.username}}" group="{{item.username}}" mode=755
+    with_items: users
+    when: item.home is defined
     tags:
       - create users
 
