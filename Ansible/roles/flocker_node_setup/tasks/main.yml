@@ -57,6 +57,7 @@
 
   - name: copy cluster.crt
     copy: src=../files/certificates/cluster.crt dest=/etc/flocker/cluster.crt owner=root group=root mode=600
+    when: control is defined
     tags:
       - flocker_node_setup
       - certificates
@@ -77,24 +78,28 @@
 
   - name: copy node.crt
     copy: src=../files/certificates/{{flocker_id}}.crt dest=/etc/flocker/node.crt owner=root group=root mode=600
+    when: flocker_id is defined
     tags:
       - flocker_node_setup
       - certificates
 
   - name: copy node.key
     copy: src=../files/certificates/{{flocker_id}}.key dest=/etc/flocker/node.key owner=root group=root mode=600
+    when: flocker_id is defined
     tags:
       - flocker_node_setup
       - certificates
 
   - name: copy plugin.crt
     copy: src=../files/certificates/plugin.crt dest=/etc/flocker/plugin.crt owner=root group=root mode=600
+    when: flocker_id is defined
     tags:
       - flocker_node_setup
       - certificates
 
   - name: copy plugin.key
     copy: src=../files/certificates/plugin.key dest=/etc/flocker/plugin.key owner=root group=root mode=600
+    when: flocker_id is defined
     tags:
       - flocker_node_setup
       - certificates
