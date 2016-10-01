@@ -1,3 +1,12 @@
+  - name: Add php7 repos if Linux dist is Debian
+    lineinfile: dest=/etc/apt/sources.list line="deb http://packages.dotdeb.org jessie all"
+    when: ansible_distribution == "Debian"
+
+  - name: update apt cache
+    apt: update_cache=yes
+    tags:
+      - update_packages
+
   - name: install php5-fpm common packages
     apt: pkg={{item}} state=present
     with_items:
