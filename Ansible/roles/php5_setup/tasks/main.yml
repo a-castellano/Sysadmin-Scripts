@@ -1,0 +1,118 @@
+  - name: install php5 common packages
+    apt: pkg={{item}} state=present force=yes
+    with_items:
+      - php5
+      - php5-mcrypt
+      - php5-cli
+      - php5-common
+      - php5-json
+      - php5-readline
+      - php-pear
+      - libmcrypt4
+      - libapache2-mod-php5
+      - libmcrypt-dev
+      - mcrypt
+    tags: 
+      - php_setup
+      - packages
+
+  - name: apache2/php.ini max_execution_time
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="max_execution_time " line='max_execution_time = {{ php_max_execution_time | default(30) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini max_input_time
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="max_input_time " line='max_input_time = {{ php_max_input_time | default(60) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini memory_limit
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="memory_limit " line='memory_limit = {{ php_memory_limit | default("128M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini error_reporting
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="error_reporting " line='error_reporting = {{ php_error_reporting | default("E_ALL & ~E_DEPRECATED & ~E_STRICT") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini post_max_size
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="post_max_size " line='post_max_size = {{ php_post_max_size | default("8M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf  
+
+  - name: apache2/php.ini file_uploads
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="^file_uploads " line='file_uploads = {{ php_file_uploads | default("On") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini upload_max_filesize
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="upload_max_filesize " line='upload_max_filesize = {{ php_upload_max_filesize | default("2M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: apache2/php.ini max_file_uploads
+    lineinfile: dest=/etc/php5/apache2/php.ini regexp="max_file_uploads " line='max_file_uploads = {{ php_max_file_uploads | default(20) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+
+
+
+
+  - name: cli/php.ini max_execution_time
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="max_execution_time " line='max_execution_time = {{ php_max_execution_time | default(30) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini max_input_time
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="max_input_time " line='max_input_time = {{ php_max_input_time | default(60) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini memory_limit
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="memory_limit " line='memory_limit = {{ php_memory_limit | default("128M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini error_reporting
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="error_reporting " line='error_reporting = {{ php_error_reporting | default("E_ALL & ~E_DEPRECATED & ~E_STRICT") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini post_max_size
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="post_max_size " line='post_max_size = {{ php_post_max_size | default("8M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf  
+
+  - name: cli/php.ini file_uploads
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="^file_uploads " line='file_uploads = {{ php_file_uploads | default("On") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini upload_max_filesize
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="upload_max_filesize " line='upload_max_filesize = {{ php_upload_max_filesize | default("2M") }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+
+  - name: cli/php.ini max_file_uploads
+    lineinfile: dest=/etc/php5/cli/php.ini regexp="max_file_uploads " line='max_file_uploads = {{ php_max_file_uploads | default(20) }}' state="present"
+    tags: 
+      - php_setup
+      - php_conf 
+ 
