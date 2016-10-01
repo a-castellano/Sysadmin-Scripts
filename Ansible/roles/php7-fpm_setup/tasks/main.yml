@@ -7,8 +7,8 @@
     tags:
       - update_packages
 
-  - name: install php5-fpm common packages
-    apt: pkg={{item}} state=present
+  - name: install php7-fpm common packages
+    apt: pkg={{item}} state=present force=yes
     with_items:
       - php7.0-fpm
       - php7.0-mysql
