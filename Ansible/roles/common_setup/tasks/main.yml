@@ -48,7 +48,16 @@
     when: ansible_distribution == "Ubuntu"
 
   - name: change hostname
+    hostname: name="{{ hostname }}"
+    when: hostname is defined and server_hostname is not defined
+    tags: common
+    notify:
+      - restart hostname
+
+
+  - name: change hostname
     hostname: name="{{ server_hostname }}"
+    when: server_hostname is defined
     tags: common
     notify:
       - restart hostname
@@ -60,5 +69,30 @@
 
   - name: Set locales
     template: src=../templates/locale.j2 dest=/etc/default/locale
+    tags:
+      - common
+
+  - name: create /root/.ssh directory
+    file: path=/root/.ssh state=directory mode=0700
+    when: root_ssh_key is defined
+    tags:
+      - common
+
+  - name: copy root ssh key
+    copy: src=../../../files/ssh_keys/{{root_ssh_key}} dest="/root/.ssh/id_rsa" mode=400 owner=root group=root
+    when: root_ssh_key is defined
+    tags:
+      - common
+
+  - name: copy root ssh key
+    copy: src=../../../files/ssh_keys/{{root_ssh_key}}.pub dest="/root/.ssh/id_rsa.pub" mode=644 owner=root group=root
+    when: root_ssh_key is defined
+    tags:
+      - common
+
+  - name: insert authorized ssh keys if exist
+    authorized_key: user=root key="{{item}}"
+    with_items: "{{root_authorized_keys}}"
+    when: root_authorized_keys is defined
     tags:
       - common
