@@ -4,3 +4,5 @@
 !.gitignore
 !test.yml.example
 !lemp.yml.example
+!Jericho.yml
+!tinyproxy
