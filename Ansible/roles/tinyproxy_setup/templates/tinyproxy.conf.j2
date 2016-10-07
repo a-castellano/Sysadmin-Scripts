@@ -32,7 +32,7 @@ StartServers {{ tinyproxy_StartServers | default(10) }}
 MaxRequestsPerChild {{ tinyproxy_MaxRequestsPerChild | default(0) }}
 
 Allow 127.0.0.1
-Allow {{ tinyproxy_AllowAddress | default('0.0.0.0/0') }}
+Allow {{ ansible_default_ipv4 }}
 
 
 ViaProxyName "{{ tinyproxy_ViaProxyName | default('tinyproxy') }}"
