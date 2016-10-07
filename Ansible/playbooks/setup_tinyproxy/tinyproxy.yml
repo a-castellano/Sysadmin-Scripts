@@ -3,7 +3,7 @@
   - hosts: TinyProxy
 
     vars_files:
-      - ../../vars/target_hosts/TinyProxy.yml
+      - ../../vars/target_hosts/tinyproxy.yml
 
     roles:
       - { role: ../../roles/tinyproxy_setup}
