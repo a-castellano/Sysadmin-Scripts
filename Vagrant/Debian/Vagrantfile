@@ -1,0 +1,12 @@
+Vagrant.configure("2") do |config|
+  config.vm.network "public_network"
+
+  config.vm.define :debian1 do |debian_config|
+    debian_config.vm.box = "debian/jessie64"
+    debian_config.vm.hostname = "debian1"
+    debian_config.vm.provider "virtualbox" do |vb|
+            vb.memory = "1024"
+    end
+    debian_config.vm.provision :shell, path: "bootstrap.sh"
+   end
+end
