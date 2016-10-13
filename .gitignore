@@ -1,5 +1,7 @@
 Vagrant/VagrantMachineTest/.vagrant
-.gitignore
 bootstrap-ansible.sh
 bootstrap-ansible.sh.example
 bootstrap.sh.example
+
+
+!.gitignore
