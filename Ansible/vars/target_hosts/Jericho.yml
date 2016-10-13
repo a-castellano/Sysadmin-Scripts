@@ -1,5 +1,4 @@
 ---
-  server_hostname: Jericho
 
   mysql_root_password: password
   mysql_client_port: 3306
@@ -34,3 +33,5 @@
   mysqldump_max_allowed_packet: "16M"
 
   isamchk_key_buffer: "16M"
+
+  flocker_domain: "windmaker.net"
