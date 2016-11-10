@@ -27,7 +27,8 @@
       - common
       - update_packages
 
-  - name: install common packages
+
+  - name: Install common packages
     apt: pkg={{item}} state=present
     with_items:
       - vim
@@ -37,15 +38,25 @@
       - unzip
       - sudo
       - tree
-    tags: 
+      - python-pip
+      - python3-pip
+      - python-dev
+      - python3-dev
+      - python-psutil
+      - mailutils
+      - curl
+    tags:
       - common
       - packages
 
-  - name: Install Ubuntu mailutils
-    apt: pkg={{item}} state=present
+  - name: Install python enviornment
+    pip: name={{item}}
     with_items:
-      - mailutils
-    when: ansible_distribution == "Ubuntu"
+      - virtualenv
+      - thefuck
+    tags:
+      - common
+      - packages
 
   - name: change hostname
     hostname: name="{{ hostname }}"
