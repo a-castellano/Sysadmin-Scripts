@@ -45,6 +45,7 @@
       - python-psutil
       - mailutils
       - curl
+      - openssl
     tags:
       - common
       - packages
