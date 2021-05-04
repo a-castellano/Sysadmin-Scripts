@@ -78,7 +78,7 @@ function perform_backup() {
 }
 
 function remove_old_backups() {
-	find ${BACKUPP_FOLDER} -mindepth 1 -maxdepth 1 -daystart -mtime +${BACKUP_RETAIN_DAYS} -delete
+	find ${BACKUPP_FOLDER} -mindepth 1 -maxdepth 1 -daystart -mtime +${BACKUP_RETAIN_DAYS} -print0 | xargs -I dir -0 /bin/rm -rf "dir"
 	delete_error=$?
 	if ((delete_error != 0)); then
 		exit 1
